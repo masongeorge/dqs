@@ -1,3 +1,1 @@
-# dqs
-
 ## Coursework 3
