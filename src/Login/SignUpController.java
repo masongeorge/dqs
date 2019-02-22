@@ -4,10 +4,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.stage.*;
+
+//
+import Helpers.*;
 
 public class SignUpController {
 
@@ -26,6 +30,9 @@ public class SignUpController {
     @FXML
     private RadioButton lecturerRadio;
 
+    private MySQLHandler SqlHandler;
+    private Alert alert;
+
     public void onStudent(){
         lecturerRadio.setSelected(false);
     }
@@ -35,12 +42,33 @@ public class SignUpController {
     }
 
     public void onSignUp(){
+        alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Sign Up");
+
         if (checkValidation()){
-            // Formatting is correct
-            // Check if user doesn't exist yet in the database...
-        }else{
+            int type = lecturerRadio.isSelected() ? 1 : 0;
+
+            try {
+                SqlHandler = new MySQLHandler("sql2279737", "fE6!aZ7*");
+                if (SqlHandler.GetUserPassword(emailTextField.getText()).isEmpty()) {
+                    if (SqlHandler.RegisterAccount(nameTextField.getText(), emailTextField.getText(),
+                            passwordField.getText(), Integer.toString(type))) {
+                        alert.setHeaderText("Account registered successfully!");
+                        alert.setContentText("Your account has been successfully registered!");
+                        // todo: possible send user info to the specified email
+                    }
+                } else {
+                    alert.setHeaderText("Account register failed");
+                    alert.setContentText("The specified account already exists.");
+                }
+            } catch (Exception e) {
+                throw e;
+            }
+        } else {
             Validators.validationErrorAlert(false);
         }
+        alert.showAndWait();
+        SqlHandler.Close();
     }
 
     public boolean checkValidation(){

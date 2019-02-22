@@ -36,7 +36,7 @@ public class Validators {
             alert.setContentText("Make sure you enter a valid email address and a password with a length greater than zero!");
         }else{
             alert.setTitle("Sign up failed!");
-            alert.setContentText("Make sure you enter your name,a valid email address and a password with a length greater than zero!");
+            alert.setContentText("Make sure you enter your name, valid email address and a password with a length greater than zero!");
         }
 
         alert.showAndWait();
