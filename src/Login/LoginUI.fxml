@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="388.0" prefWidth="492.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Login.LoginController">
+   <children>
+      <Label layoutX="157.0" layoutY="31.0" text="Welome to LC12" textFill="#a40000">
+         <font>
+            <Font name="System Bold" size="23.0" />
+         </font>
+      </Label>
+      <Label layoutX="30.0" layoutY="85.0" text="Email:">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+      </Label>
+      <TextField fx:id="emailTextField" layoutX="30.0" layoutY="119.0" prefHeight="28.0" prefWidth="432.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </TextField>
+      <PasswordField fx:id="passwordField" layoutX="30.0" layoutY="200.0" prefHeight="28.0" prefWidth="432.0">
+         <font>
+            <Font size="14.0" />
+         </font>
+      </PasswordField>
+      <Label layoutX="30.0" layoutY="167.0" text="Password:">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+      </Label>
+      <Button layoutX="121.0" layoutY="251.0" mnemonicParsing="false" onAction="#onLogin" prefHeight="39.0" prefWidth="251.0" text="Login">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Button>
+      <Label layoutX="30.0" layoutY="348.0" text="Don't have an account?">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </Label>
+      <Button layoutX="183.0" layoutY="342.0" mnemonicParsing="false" onAction="#onSignUp" prefHeight="27.0" prefWidth="83.0" text="Sign Up">
+         <font>
+            <Font size="12.0" />
+         </font>
+      </Button>
+   </children>
+</Pane>
