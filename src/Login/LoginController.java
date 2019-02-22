@@ -19,35 +19,57 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
-    //
     private Alert alert;
     private MySQLHandler SqlHandler;
 
+
+    @FXML
+    public void initialize(){
+        try{
+            SqlHandler = new MySQLHandler("sql2279737", "fE6!aZ7*");
+        }catch (Exception e){
+            System.out.println(e);
+        }
+    }
+
     public void onLogin(){
-        alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Authenticating");
-        // Validate text fields
         if (checkValidation()){
             try {
-                // Initialize new instance of SqlHandler
-                SqlHandler = new MySQLHandler("sql2279737", "fE6!aZ7*");
                 // Check if account exists
                 if (SqlHandler.CheckAccountExists(emailTextField.getText(), passwordField.getText())) {
-                    alert.setHeaderText("Login success!");
-                    alert.setContentText(String.format("You have successfully logged in as %s", emailTextField.getText()));
-                } else {
-                    alert.setHeaderText("Login failed!");
-                    alert.setContentText("Unable to login. Either username or password is incorrect.");
+                    // Login Success
+                    loadStudentHome();
+                }else {
+                    // Login Failed
+                    AlertHandler.showErrorAlert("Login failed!", "Unable to login!", "Your username or password is incorrect");
                 }
             }
             catch (Exception e) {
                 throw e;
             }
-        } else {
-            Validators.validationErrorAlert(true);
+        }else {
+            // Validation is incorrect
+            AlertHandler.showErrorAlert("Login failed!", "Invalid format!", "Make sure you enter a valid email address and a password with a length greater than zero!");
         }
-        alert.showAndWait();
-        SqlHandler.Close();
+    }
+
+    public void loadStudentHome(){
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/Student/StudentHomeUI.fxml"));
+            loader.load();
+
+            Parent parent = loader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle("Home");
+            stage.setScene(new Scene(parent, 600, 400));
+            stage.setResizable(false);
+            stage.show();
+
+            closeScreen();
+        }catch (Exception e){
+            System.out.println("Error: " + e);
+        }
     }
 
     public boolean checkValidation(){
@@ -70,12 +92,16 @@ public class LoginController {
             stage.setResizable(false);
             stage.show();
 
-            Stage oldStage = (Stage)emailTextField.getScene().getWindow();
-            oldStage.close();
+            closeScreen();
         }catch (Exception e){
             System.out.println("Error: " + e);
         }
     }
 
+    public void closeScreen(){
+        SqlHandler.Close();
+        Stage oldStage = (Stage)emailTextField.getScene().getWindow();
+        oldStage.close();
+    }
 
 }

@@ -2,6 +2,8 @@ package Helpers;
 
 import java.sql.*;
 
+// Ideas: password encryption, ...
+
 public class MySQLHandler {
 
     private Connection Con;

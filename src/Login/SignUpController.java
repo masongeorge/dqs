@@ -31,7 +31,15 @@ public class SignUpController {
     private RadioButton lecturerRadio;
 
     private MySQLHandler SqlHandler;
-    private Alert alert;
+
+    @FXML
+    public void initialize(){
+        try{
+            SqlHandler = new MySQLHandler("sql2279737", "fE6!aZ7*");
+        }catch (Exception e){
+            System.out.println(e);
+        }
+    }
 
     public void onStudent(){
         lecturerRadio.setSelected(false);
@@ -42,33 +50,28 @@ public class SignUpController {
     }
 
     public void onSignUp(){
-        alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Sign Up");
-
         if (checkValidation()){
             int type = lecturerRadio.isSelected() ? 1 : 0;
 
             try {
-                SqlHandler = new MySQLHandler("sql2279737", "fE6!aZ7*");
                 if (SqlHandler.GetUserPassword(emailTextField.getText()).isEmpty()) {
                     if (SqlHandler.RegisterAccount(nameTextField.getText(), emailTextField.getText(),
                             passwordField.getText(), Integer.toString(type))) {
-                        alert.setHeaderText("Account registered successfully!");
-                        alert.setContentText("Your account has been successfully registered!");
-                        // todo: possible send user info to the specified email
+                        // Sign up Successful
+                        AlertHandler.showShortMessage("Success","Account created successfully!");
+                        loadLogin();
                     }
                 } else {
-                    alert.setHeaderText("Account register failed");
-                    alert.setContentText("The specified account already exists.");
+                    // Sign up failed, account exists
+                    AlertHandler.showErrorAlert("Sign up failed", "Account already exists!", "Please choose another email address");
                 }
             } catch (Exception e) {
                 throw e;
             }
         } else {
-            Validators.validationErrorAlert(false);
+            AlertHandler.showErrorAlert("Sign up failed", "Invalid format!", "Make sure you enter your name, valid email address and a password with a length greater than zero!");
         }
-        alert.showAndWait();
-        SqlHandler.Close();
+
     }
 
     public boolean checkValidation(){
@@ -80,6 +83,10 @@ public class SignUpController {
     }
 
     public void onLogin(){
+        loadLogin();
+    }
+
+    public void loadLogin(){
         try{
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("LoginUI.fxml"));
@@ -92,11 +99,16 @@ public class SignUpController {
             stage.setResizable(false);
             stage.show();
 
-            Stage oldStage = (Stage)emailTextField.getScene().getWindow();
-            oldStage.close();
+            closeScreen();
         }catch (Exception e){
             System.out.println("Error: " + e);
         }
+    }
+
+    public void closeScreen(){
+        SqlHandler.Close();
+        Stage oldStage = (Stage)emailTextField.getScene().getWindow();
+        oldStage.close();
     }
 
 

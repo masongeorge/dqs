@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Student.StudentHomeController">
+   <children>
+      <Label fx:id="welcomeLabel" alignment="CENTER" layoutX="3.0" layoutY="22.0" prefHeight="24.0" prefWidth="590.0" text="Welcome UserName" textAlignment="CENTER" textFill="#9a0c0c">
+         <font>
+            <Font name="System Bold" size="19.0" />
+         </font>
+      </Label>
+      <Button layoutX="14.0" layoutY="21.0" mnemonicParsing="false" onAction="#onSignOut" text="Sign out" />
+      <Button layoutX="153.0" layoutY="337.0" mnemonicParsing="false" onAction="#onOpenModule" prefHeight="45.0" prefWidth="297.0" text="Open Selected Module" />
+      <TableView fx:id="moduleTableView" layoutX="20.0" layoutY="78.0" prefHeight="233.0" prefWidth="562.0">
+        <columns>
+          <TableColumn fx:id="moduleColumn" editable="false" prefWidth="286.0" text="Module Name" />
+          <TableColumn fx:id="lecturerColumn" editable="false" minWidth="0.0" prefWidth="275.0" text="Lecturer" />
+        </columns>
+      </TableView>
+   </children>
+</AnchorPane>

@@ -1,11 +1,11 @@
 package Model;
 
 public class User {
-    int userID;
-    String name;
-    boolean isStudent;
-    String email;
-    String password;
+    private int userID;
+    private String name;
+    private boolean isStudent;
+    private String email;
+    private String password;
 
     public User(int userID, String name, boolean isStudent, String email, String password){
         this.userID = userID;
