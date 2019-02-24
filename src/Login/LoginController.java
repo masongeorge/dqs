@@ -1,10 +1,14 @@
 package Login;
 
+import Model.StudentModule;
+import Model.User;
+import Student.StudentHomeController;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -19,15 +23,14 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
-    private Alert alert;
     private MySQLHandler SqlHandler;
 
 
     @FXML
     public void initialize(){
-        try{
+        try {
             SqlHandler = new MySQLHandler("sql2279737", "fE6!aZ7*");
-        }catch (Exception e){
+        } catch (Exception e){
             System.out.println(e);
         }
     }
@@ -41,7 +44,7 @@ public class LoginController {
                     loadStudentHome();
                 }else {
                     // Login Failed
-                    AlertHandler.showErrorAlert("Login failed!", "Unable to login!", "Your username or password is incorrect");
+                    AlertHandler.showErrorAlert(3,"Login failed!", "Unable to login!", "Your username or password is incorrect");
                 }
             }
             catch (Exception e) {
@@ -49,7 +52,7 @@ public class LoginController {
             }
         }else {
             // Validation is incorrect
-            AlertHandler.showErrorAlert("Login failed!", "Invalid format!", "Make sure you enter a valid email address and a password with a length greater than zero!");
+            AlertHandler.showErrorAlert(2,"Login failed!", "Invalid format!", "Make sure you enter a valid email address and a password with a length greater than zero!");
         }
     }
 
@@ -59,11 +62,15 @@ public class LoginController {
             loader.setLocation(getClass().getResource("/Student/StudentHomeUI.fxml"));
             loader.load();
 
+            StudentHomeController studentHomeController = loader.getController();
+            studentHomeController.initData(emailTextField.getText());
+
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
             stage.setTitle("Home");
             stage.setScene(new Scene(parent, 600, 400));
             stage.setResizable(false);
+
             stage.show();
 
             closeScreen();

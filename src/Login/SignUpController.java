@@ -4,7 +4,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
@@ -63,13 +62,13 @@ public class SignUpController {
                     }
                 } else {
                     // Sign up failed, account exists
-                    AlertHandler.showErrorAlert("Sign up failed", "Account already exists!", "Please choose another email address");
+                    AlertHandler.showErrorAlert(2,"Sign up failed", "Account already exists!", "Please choose another email address");
                 }
             } catch (Exception e) {
                 throw e;
             }
         } else {
-            AlertHandler.showErrorAlert("Sign up failed", "Invalid format!", "Make sure you enter your name, valid email address and a password with a length greater than zero!");
+            AlertHandler.showErrorAlert(3,"Sign up failed", "Invalid format!", "Make sure you enter your name, valid email address and a password with a length greater than zero!");
         }
 
     }
