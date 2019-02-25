@@ -1,10 +1,5 @@
 package Helpers;
 
-import Model.StudentModule;
-import Model.User;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 import java.sql.*;
 
 // Ideas: password encryption, ...
@@ -56,15 +51,14 @@ public class MySQLHandler {
     public Boolean RegisterAccount(String AccName, String Username, String Password, String AccountType) {
         Boolean ret = false;
         try {
-            String query ="INSERT INTO Users (name, username, password, acc_type, modules)"
-                    + " VALUES (?, ?, ?, ?, ?)";
+            String query ="INSERT INTO Users (name, username, password, acc_type)"
+                    + " VALUES (?, ?, ?, ?)";
 
             PreparedStatement preparedStmt = Con.prepareStatement(query);
             preparedStmt.setString (1, AccName);
             preparedStmt.setString (2, Username);
             preparedStmt.setString (3, Password);
-            preparedStmt.setString (4, AccountType);
-            preparedStmt.setString (5, "0");
+            preparedStmt.setString   (4, AccountType);
 
             preparedStmt.execute();
             ret = true;
@@ -144,64 +138,5 @@ public class MySQLHandler {
             id = -1;
         }
         return id;
-    }
-
-    public String[] GetUserData(String Username) {
-        String name = "";
-        String email = Username;
-        String type = "";
-        String modules = "";
-
-        try {
-            Statement stmt = Con.createStatement();
-            String query = String.format("SELECT name, acc_type, modules FROM Users WHERE username='%s'", Username);
-            //System.out.println(query);
-            ResultSet rs = stmt.executeQuery(query);
-            while(rs.next()) {
-                name = rs.getString("name");
-                type = rs.getString("acc_type");
-                modules = rs.getString("modules");
-            }
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return new String[] { name, email, type, modules };
-    }
-
-    public String[] GetUserModules(int id) {
-        String ModuleName = "";
-        String LecturerName = "";
-
-        try {
-            Statement stmt = Con.createStatement();
-            String query = "SELECT name, lecturer FROM Modules WHERE id=" + id;
-            ResultSet rs = stmt.executeQuery(query);
-            while(rs.next()) {
-                ModuleName = rs.getString("name");
-                LecturerName = rs.getString("lecturer");
-            }
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return new String[] { ModuleName, LecturerName };
-    }
-
-    public String GetNameById(int id) {
-        String res = "";
-        try {
-            Statement stmt = Con.createStatement();
-            String query = String.format("SELECT name FROM Users WHERE id=%d", id);
-            //System.out.println(query);
-            ResultSet rs = stmt.executeQuery(query);
-            while(rs.next()) {
-                res = rs.getString("name");
-            }
-        }
-        catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
-        return res;
     }
 }

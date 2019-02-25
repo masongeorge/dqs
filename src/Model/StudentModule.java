@@ -1,24 +1,16 @@
 package Model;
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class StudentModule {
-    private IntegerProperty moduleId;
     private StringProperty moduleName;
     private StringProperty lecturerName;
 
-    public StudentModule(int moduleId, String moduleName, String lecturerName){
-        this.moduleId = new SimpleIntegerProperty(moduleId);
+    public StudentModule(String moduleName, String lecturerName){
         this.moduleName = new SimpleStringProperty(moduleName);
         this.lecturerName = new SimpleStringProperty(lecturerName);
     }
-
-    public IntegerProperty getModuleIdProperty() { return moduleId; }
-
-    public void setModuleId(int id) { this.moduleId.set(id);}
 
     public StringProperty getModuleNameProperty() {
         return moduleName;
