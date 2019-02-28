@@ -48,9 +48,11 @@ public class EmailHandler {
         message += Name;
         message += " for creating an account at LC 12.</br></br>";
         message += "Your email is: <b>";
-        message += "Test@test.test</b></br>";
+        message += Email;
+        message += "</b></br>";
         message += "Your password is: <b>";
-        message += "password</b></br></br>";
+        message += Password;
+        message += "</b></br></br>";
         message += "LC 12 Administrator";
 
         this.SendEmail(Email, "Thank you for creating an account at LC 12", message);
