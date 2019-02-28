@@ -1,6 +1,8 @@
 package Helpers;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.*;
 
 // Ideas: password encryption, ...
 
@@ -138,5 +140,77 @@ public class MySQLHandler {
             id = -1;
         }
         return id;
+    }
+
+    public List<Integer> GetUserModules(int Id) {
+        List<Integer> Modules = new ArrayList<>();
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT student_module_id FROM Modules WHERE student_id='%d'", Id);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                Modules.add(rs.getInt("student_module_id"));
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return Modules;
+    }
+
+    public String[] GetUserData(String Username)
+    {
+        String id = "";
+        String name = "";
+        String type = "";
+
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT id, name, acc_type FROM Users WHERE username='%s'", Username);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                id = String.valueOf(rs.getInt("id"));
+                name = rs.getString("name");
+                type = rs.getString("acc_type");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return new String[] {id, name, type};
+    }
+
+    public String GetModuleNameById(int id) {
+        String module = "";
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT module_name FROM ModulesData WHERE module_id='%d'", id);
+            //System.out.println(query);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                module = rs.getString("module_name");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return module;
+    }
+
+    public String GetLecturerByModuleId(int id) {
+        String lecturer = "";
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT name from Users WHERE id = (SELECT lecturer_id FROM ModulesData WHERE module_id='%d')", id);
+            //System.out.println(query);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                lecturer = rs.getString("name");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return lecturer;
     }
 }

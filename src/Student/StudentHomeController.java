@@ -1,6 +1,7 @@
 package Student;
 
 import Helpers.AlertHandler;
+import Helpers.MySQLHandler;
 import Model.StudentModule;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -14,6 +15,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
+
+import java.util.List;
 
 public class StudentHomeController {
 
@@ -33,15 +36,28 @@ public class StudentHomeController {
 
     private StudentModule selectedModule;
 
+    private Model.User user;
+
+    private MySQLHandler SqlHandler;
+
     @FXML
     public void initialize(){
         setupTableView();
-        loadModules();
+        try{
+            SqlHandler = new MySQLHandler("sql2279737", "fE6!aZ7*");
+        }catch (Exception e){
+            System.out.println(e);
+        }
+    }
+
+    public void initData(int userID, String name, boolean isStudent, String email) {
+        user = new Model.User(userID, name, isStudent, email);
         loadUser();
+        loadModules();
     }
 
     public void loadUser(){
-        welcomeLabel.setText("Welcome " + "Marton");
+        welcomeLabel.setText("Welcome " + user.getName());
     }
 
     public void setupTableView(){
@@ -61,9 +77,12 @@ public class StudentHomeController {
 
     public void loadModules(){
         modules = FXCollections.observableArrayList();
-        modules.add(new StudentModule("Maths", "Maths teacher"));
-        modules.add(new StudentModule("Physics", "Physics teacher"));
-        modules.add(new StudentModule("Business", "Business teacher"));
+
+        List<Integer> StudentModules = SqlHandler.GetUserModules(user.getId());
+
+        for (int i : StudentModules) {
+            modules.add(new StudentModule(SqlHandler.GetModuleNameById(i), SqlHandler.GetLecturerByModuleId(i)));
+        }
 
         moduleTableView.setItems(modules);
         moduleTableView.refresh();
@@ -78,6 +97,7 @@ public class StudentHomeController {
     }
 
     public void onSignOut(){
+        SqlHandler.Close();
         loadLogin();
     }
 

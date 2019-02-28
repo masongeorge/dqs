@@ -1,5 +1,6 @@
 package Login;
 
+import Student.StudentHomeController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -58,6 +59,16 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/Student/StudentHomeUI.fxml"));
             loader.load();
+
+            String[] Data = SqlHandler.GetUserData(emailTextField.getText());
+            boolean at = true ? Data[1] == "1" : false;
+
+            StudentHomeController controller = loader.getController();
+            controller.initData(Integer.parseInt(Data[0]),
+                    Data[1],
+                    at,
+                    emailTextField.getText()
+                    );
 
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
