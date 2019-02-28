@@ -32,6 +32,8 @@ public class SignUpController {
 
     private MySQLHandler SqlHandler;
 
+    private EmailHandler EmailSender;
+
     @FXML
     public void initialize(){
         try{
@@ -59,6 +61,10 @@ public class SignUpController {
                             passwordField.getText(), Integer.toString(type))) {
                         // Sign up Successful
                         AlertHandler.showShortMessage("Success","Account created successfully!");
+                        // Send Email
+                        EmailSender = new EmailHandler();
+                        EmailSender.SendRegisterInfo(nameTextField.getText(), emailTextField.getText(), passwordField.getText());
+                        // Load new scene
                         loadLogin();
                     }
                 } else {
