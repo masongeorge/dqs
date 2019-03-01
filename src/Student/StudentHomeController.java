@@ -92,13 +92,34 @@ public class StudentHomeController {
         if (selectedModule == null){
             AlertHandler.showErrorAlert("Error", "Select a module first!", "Select a module from the list first and then click on open module");
         }else{
-            System.out.println("Selected: " + selectedModule.getModuleNameProperty().get() + ", " + selectedModule.getLecturerNameProperty().get());
+            loadModuleScreen();
         }
     }
 
     public void onSignOut(){
         SqlHandler.Close();
         loadLogin();
+    }
+
+    public void loadModuleScreen(){
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/Student/StudentSelectedModuleUI.fxml"));
+            loader.load();
+            StudentSelectedModuleController controller = loader.getController();
+            controller.initData();
+
+            Parent parent = loader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle("Maths");
+            stage.setScene(new Scene(parent, 734, 643));
+            stage.setResizable(false);
+            stage.show();
+
+            closeScreen();
+        }catch (Exception e){
+            System.out.println("Error: " + e);
+        }
     }
 
     public void loadLogin(){
