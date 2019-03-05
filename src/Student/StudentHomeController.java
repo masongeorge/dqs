@@ -3,6 +3,7 @@ package Student;
 import Helpers.AlertHandler;
 import Helpers.MySQLHandler;
 import Model.StudentModule;
+import Model.StudentUser;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -15,6 +16,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
+import Model.User;
 
 import java.util.List;
 
@@ -36,7 +38,7 @@ public class StudentHomeController {
 
     private StudentModule selectedModule;
 
-    private Model.User user;
+    private StudentUser user;
 
     private MySQLHandler SqlHandler;
 
@@ -50,8 +52,8 @@ public class StudentHomeController {
         }
     }
 
-    public void initData(int userID, String name, boolean isStudent, String email) {
-        user = new Model.User(userID, name, isStudent, email);
+    public void initData(StudentUser user) {
+        this.user = user;
         loadUser();
         loadModules();
     }
@@ -78,11 +80,20 @@ public class StudentHomeController {
     public void loadModules(){
         modules = FXCollections.observableArrayList();
 
-        List<Integer> StudentModules = SqlHandler.GetUserModules(user.getId());
+        if (user.studentModules.isEmpty()){
+            List<Integer> StudentModules = SqlHandler.GetUserModules(user.getId());
 
-        for (int i : StudentModules) {
-            modules.add(new StudentModule(SqlHandler.GetModuleNameById(i), SqlHandler.GetLecturerByModuleId(i)));
+            for (int i : StudentModules) {
+                StudentModule module = new StudentModule(SqlHandler.GetModuleNameById(i), SqlHandler.GetLecturerByModuleId(i));
+                modules.add(module);
+                user.studentModules.add(module);
+            }
+        }else{
+            for (StudentModule module : user.studentModules){
+                modules.add(module);
+            }
         }
+
 
         moduleTableView.setItems(modules);
         moduleTableView.refresh();
@@ -107,7 +118,7 @@ public class StudentHomeController {
             loader.setLocation(getClass().getResource("/Student/StudentSelectedModuleUI.fxml"));
             loader.load();
             StudentSelectedModuleController controller = loader.getController();
-            controller.initData();
+            controller.initData(user);
 
             Parent parent = loader.getRoot();
             Stage stage = new Stage();

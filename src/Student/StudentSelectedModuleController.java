@@ -3,6 +3,8 @@ package Student;
 import Helpers.AlertHandler;
 import Model.Assessment;
 import Model.StudentModule;
+import Model.StudentUser;
+import Model.User;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -70,13 +72,16 @@ public class StudentSelectedModuleController {
 
     // Check answers: Only possible for summative assessments if their deadline has passed. Only possible for formative assessments if user finalised it(meaning cannot retake it) but deadline doesn't need to be passed for this type of assessment.
 
+    private StudentUser user;
 
     @FXML
     public void initialize(){
         setupTableView();
     }
 
-    public void initData(){
+    public void initData(StudentUser user){
+        this.user = user;
+
         // use selectedModule
         moduleLabel.setText("Maths");
         lecturerLabel.setText("By " + "Brittney Senna");
@@ -189,6 +194,8 @@ public class StudentSelectedModuleController {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(getClass().getResource("/Student/StudentHomeUI.fxml"));
             loader.load();
+            StudentHomeController controller = loader.getController();
+            controller.initData(user);
 
             Parent parent = loader.getRoot();
             Stage stage = new Stage();

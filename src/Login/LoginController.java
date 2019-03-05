@@ -1,5 +1,6 @@
 package Login;
 
+import Model.StudentUser;
 import Student.StudentHomeController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -9,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import Model.User;
 
 import Helpers.*;
 
@@ -64,11 +66,17 @@ public class LoginController {
             boolean at = true ? Data[1] == "1" : false;
 
             StudentHomeController controller = loader.getController();
-            controller.initData(Integer.parseInt(Data[0]),
-                    Data[1],
-                    at,
-                    emailTextField.getText()
-                    );
+
+            if (at){
+                // Create and load a Lecturer User
+
+            }else{
+                // Create and load a Student User
+
+                StudentUser studentUser = new StudentUser(Integer.parseInt(Data[0]), Data[1], emailTextField.getText());
+                controller.initData(studentUser);
+            }
+
 
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
