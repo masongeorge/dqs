@@ -27,4 +27,12 @@ public class StudentModule {
     public void setLecturerName(String lecturerName) {
         this.lecturerName.set(lecturerName);
     }
+
+    public String getModuleName(){
+        return moduleName.get();
+    }
+
+    public String getLecturerName(){
+        return lecturerName.get();
+    }
 }

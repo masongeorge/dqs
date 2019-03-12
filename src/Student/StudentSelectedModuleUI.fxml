@@ -35,10 +35,11 @@
       </TableView>
       <TableView fx:id="completedTableView" layoutX="16.0" layoutY="417.0" prefHeight="159.0" prefWidth="705.0">
          <columns>
-            <TableColumn fx:id="completedNameColumn" prefWidth="208.0" text="Name" />
-            <TableColumn fx:id="completedDueColumn" minWidth="5.0" prefWidth="178.0" text="Due date" />
-            <TableColumn fx:id="completedTypeColumn" prefWidth="178.0" text="Type" />
-            <TableColumn fx:id="completedResultColumn" minWidth="0.0" prefWidth="139.0" text="Result" />
+            <TableColumn fx:id="completedNameColumn" prefWidth="193.0" text="Name" />
+            <TableColumn fx:id="completedDueColumn" minWidth="5.0" prefWidth="154.0" text="Due date" />
+            <TableColumn fx:id="completedTypeColumn" prefWidth="133.0" text="Type" />
+            <TableColumn fx:id="completedResultColumn" minWidth="0.0" prefWidth="102.0" text="Result" />
+            <TableColumn fx:id="completedRetakeColumn" prefWidth="120.0" text="Retake Possible" />
          </columns>
       </TableView>
       <Label layoutX="14.0" layoutY="383.0" text="Completed assessments">

@@ -4,29 +4,45 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 public class Assessment {
-    private int id;
     private StringProperty name;
     private StringProperty assignedDate;
     private StringProperty dueDate;
     private int type; // 0 = Formative, 1 = "Summative"
+    private boolean completed;
     private double result;
 
-    public Assessment(int id, String name, String assignedDate, String dueDate, int type) {
-        this.id = id;
-        this.name = new SimpleStringProperty(name);
-        this.assignedDate = new SimpleStringProperty(assignedDate);;
-        this.dueDate = new SimpleStringProperty(dueDate);;
-        this.type = type;
-    }
-
-    // With Result
-    public Assessment(int id, String name, String assignedDate, String dueDate, int type, double result) {
-        this.id = id;
+    public Assessment(String name, String assignedDate, String dueDate, int type, boolean completed, double result) {
         this.name = new SimpleStringProperty(name);;
         this.assignedDate = new SimpleStringProperty(assignedDate);;
         this.dueDate = new SimpleStringProperty(dueDate);;
         this.type = type;
         this.result = result;
+    }
+
+    public boolean isCompleted() {
+        return completed;
+    }
+
+    public boolean isRetakePossible(){
+        return false;
+    }
+
+    public boolean isCheckAnswersPossible(){
+        return false;
+    }
+
+    public StringProperty getIsRetakePossible(){
+        // if due date is not passed and type is formative and completed is false then YES
+        if (isRetakePossible()){
+            return new SimpleStringProperty( "Yes");
+        }else{
+            return new SimpleStringProperty( "No");
+        }
+
+    }
+
+    public void setCompleted(boolean completed) {
+        this.completed = completed;
     }
 
     public String getResultString(){
@@ -44,14 +60,6 @@ public class Assessment {
     public StringProperty getResultStringProperty(){
 
         return new SimpleStringProperty(getResultString());
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public StringProperty getNameProperty() {

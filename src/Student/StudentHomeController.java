@@ -118,7 +118,8 @@ public class StudentHomeController {
             loader.setLocation(getClass().getResource("/Student/StudentSelectedModuleUI.fxml"));
             loader.load();
             StudentSelectedModuleController controller = loader.getController();
-            controller.initData(user);
+
+            controller.initData(user, selectedModule);
 
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
