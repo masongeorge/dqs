@@ -1,6 +1,8 @@
 package Student;
 
 import Helpers.AlertHandler;
+import Helpers.Extra;
+import Helpers.MySQLHandler;
 import Model.Assessment;
 import Model.StudentModule;
 import Model.StudentUser;
@@ -17,6 +19,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
+
+import java.util.List;
 
 public class StudentSelectedModuleController {
 
@@ -69,6 +73,12 @@ public class StudentSelectedModuleController {
 
     private Assessment selectedCompletedAssessment;
 
+    private MySQLHandler SqlHandler;
+
+    private List<Integer> StudentAssessments;
+
+    private List<Integer> StudentCompletedAssessments;
+
     /*
     Summative = 1 attempt only
     Formative = Multiple attempts
@@ -92,7 +102,13 @@ public class StudentSelectedModuleController {
 
     @FXML
     public void initialize(){
+
         setupTableView();
+        try{
+            SqlHandler = new MySQLHandler("sql2279737", "fE6!aZ7*");
+        }catch (Exception e){
+            System.out.println(e);
+        }
     }
 
     public void initData(StudentUser user, StudentModule selectedModule){
@@ -101,6 +117,8 @@ public class StudentSelectedModuleController {
 
         moduleLabel.setText(selectedModule.getModuleName());
         lecturerLabel.setText("By " + selectedModule.getLecturerName());
+        StudentAssessments = SqlHandler.GetStudentAssessments(user.getId());
+        StudentCompletedAssessments = SqlHandler.GetCompletedAssessments(user.getId());
         loadNewAssessments();
         loadCompletedAssessments();
     }
@@ -146,18 +164,29 @@ public class StudentSelectedModuleController {
 
     public void loadNewAssessments(){
         newAssessments = FXCollections.observableArrayList();
-        newAssessments.add(new Assessment("Derivation Test", "01/03/2019", "12/03/2019", 0, false,-1));
-        newAssessments.add(new Assessment("Integration Test", "02/03/2019", "22/03/2019", 1, false,-1));
-
+        for (int StudentAssessment : StudentAssessments) {
+            String[] AssessmentData = SqlHandler.GetAssessmentData(StudentAssessment);
+            if (Extra.IsAssessmentNew(AssessmentData[3])) {
+                if (Integer.parseInt(AssessmentData[0]) == selectedModule.getmoduleId()) {
+                    newAssessments.add(new Assessment(AssessmentData[1], AssessmentData[2],
+                            AssessmentData[3], Integer.parseInt(AssessmentData[4]), false, -1));
+                }
+            }
+        }
         newTableView.setItems(newAssessments);
         newTableView.refresh();
     }
 
     public void loadCompletedAssessments(){
         completedAssessments = FXCollections.observableArrayList();
-        completedAssessments.add(new Assessment("Geometry Test", "11/02/2019", "12/02/2019", 0, false,98));
-        completedAssessments.add(new Assessment("Statistics Test", "12/02/2019", "22/02/2019", 1, true,78));
-
+        for (int StudentAssessment : StudentCompletedAssessments) {
+            String[] AssessmentData = SqlHandler.GetAssessmentData(StudentAssessment);
+            if (Integer.parseInt(AssessmentData[0]) == selectedModule.getmoduleId()) {
+                completedAssessments.add(new Assessment(AssessmentData[1], AssessmentData[2],
+                        AssessmentData[3], Integer.parseInt(AssessmentData[4]), false,
+                        Double.valueOf(SqlHandler.GetAssessmentResult(StudentAssessment))));
+            }
+        }
         completedTableView.setItems(completedAssessments);
         completedTableView.refresh();
     }

@@ -7,15 +7,15 @@ public class Assessment {
     private StringProperty name;
     private StringProperty assignedDate;
     private StringProperty dueDate;
-    private int type; // 0 = Formative, 1 = "Summative"
+    private int atype; // 0 = Formative, 1 = "Summative"
     private boolean completed;
     private double result;
 
-    public Assessment(String name, String assignedDate, String dueDate, int type, boolean completed, double result) {
+    public Assessment(String name, String assignedDate, String dueDate, int atype, boolean completed, double result) {
         this.name = new SimpleStringProperty(name);;
         this.assignedDate = new SimpleStringProperty(assignedDate);;
         this.dueDate = new SimpleStringProperty(dueDate);;
-        this.type = type;
+        this.atype = atype;
         this.result = result;
     }
 
@@ -24,7 +24,7 @@ public class Assessment {
     }
 
     public boolean isRetakePossible(){
-        return false;
+        if (atype == 0) return true; else return false;
     }
 
     public boolean isCheckAnswersPossible(){
@@ -32,7 +32,6 @@ public class Assessment {
     }
 
     public StringProperty getIsRetakePossible(){
-        // if due date is not passed and type is formative and completed is false then YES
         if (isRetakePossible()){
             return new SimpleStringProperty( "Yes");
         }else{
@@ -50,7 +49,7 @@ public class Assessment {
     }
 
     public String getTypeString(){
-        return type == 0 ? "Formative" : "Summative";
+        return atype == 0 ? "Formative" : "Summative";
     }
 
     public StringProperty getTypeStringPropoerty(){
@@ -87,11 +86,11 @@ public class Assessment {
     }
 
     public int getType() {
-        return type;
+        return atype;
     }
 
     public void setType(int type) {
-        this.type = type;
+        this.atype = type;
     }
 
     public double getResult() {

@@ -84,7 +84,7 @@ public class StudentHomeController {
             List<Integer> StudentModules = SqlHandler.GetUserModules(user.getId());
 
             for (int i : StudentModules) {
-                StudentModule module = new StudentModule(SqlHandler.GetModuleNameById(i), SqlHandler.GetLecturerByModuleId(i));
+                StudentModule module = new StudentModule(i, SqlHandler.GetModuleNameById(i), SqlHandler.GetLecturerByModuleId(i));
                 modules.add(module);
                 user.studentModules.add(module);
             }

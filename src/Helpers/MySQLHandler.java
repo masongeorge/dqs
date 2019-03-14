@@ -213,4 +213,79 @@ public class MySQLHandler {
         }
         return lecturer;
     }
+
+    public String[] GetAssessmentData(int assessmentId) {
+        String moduleID = "";
+        String title = "";
+        String assignedDate = "";
+        String dueDate = "";
+        String atype = "";
+
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT moduleID, title, assignedDate, dueDate, type FROM Assessments WHERE assessment_id=%d", assessmentId);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                moduleID = rs.getString("moduleID");
+                title = rs.getString("title");
+                assignedDate = String.valueOf(rs.getDate("assignedDate"));
+                dueDate = String.valueOf(rs.getDate("dueDate"));
+                atype = String.valueOf(rs.getInt("type"));
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return new String[] {moduleID, title, assignedDate, dueDate, atype};
+    }
+
+
+    public List<Integer> GetStudentAssessments(int studentId) {
+        List<Integer> list = new ArrayList<>();
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT assessmentID from StudentsAssessments WHERE studentID = %d", studentId);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                list.add(rs.getInt("assessmentID"));
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
+    }
+
+    public List<Integer> GetCompletedAssessments(int studentId) {
+        List<Integer> list = new ArrayList<>();
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT assessmentID from StudentsAssessments WHERE studentID = %d AND completed = '1'", studentId);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                list.add(rs.getInt("assessmentID"));
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
+    }
+
+    public String GetAssessmentResult(int AssessmentId) {
+        String result = "";
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT result from StudentsAssessments WHERE assessmentID = %d", AssessmentId);
+            //System.out.println(query);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                result = rs.getString("result");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
 }
