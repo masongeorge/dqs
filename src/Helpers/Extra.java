@@ -37,10 +37,27 @@ public class Extra {
 
             //in milliseconds
             long diff = d2.getTime() - d1.getTime();
-            long diffDays = diff / (24 * 60 * 60 * 1000);
 
-            result += " (" + diffDays + " days left)";
+            long secondsInMilli = 1000;
+            long minutesInMilli = secondsInMilli * 60;
+            long hoursInMilli = minutesInMilli * 60;
+            long daysInMilli = hoursInMilli * 24;
 
+            long elapsedDays = diff / daysInMilli;
+            diff = diff % daysInMilli;
+
+            long elapsedHours = diff / hoursInMilli;
+            diff = diff % hoursInMilli;
+
+            if (elapsedDays > 1) {
+                if (elapsedHours == 0) {
+                    result = String.format(" (%d days left)", elapsedDays);
+                } else {
+                    result = String.format(" (%d days, %d hours left)", elapsedDays, elapsedHours);
+                }
+            } else {
+                result = String.format(" (%d hours left)", elapsedHours);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
