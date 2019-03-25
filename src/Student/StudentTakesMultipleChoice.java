@@ -188,7 +188,7 @@ public class StudentTakesMultipleChoice {
 
     public void submitTest(){
         // User's score
-        int userScore = test.calculateScore();
+        double userScore = (double) test.calculateScore();
         double percent = userScore/5*100;
         int correctAnswers = test.correctAnswers();
         int wrongAnswers = test.wrongAnswers();
