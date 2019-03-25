@@ -21,6 +21,7 @@ import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
 import java.util.List;
+import java.util.Map;
 
 public class StudentSelectedModuleController {
 
@@ -105,7 +106,7 @@ public class StudentSelectedModuleController {
 
         setupTableView();
         try{
-            SqlHandler = new MySQLHandler("sql2279737", "fE6!aZ7*");
+            SqlHandler = new MySQLHandler("c1841485", "6Z=q]K~GXKzcjW=d");
         }catch (Exception e){
             System.out.println(e);
         }
@@ -169,7 +170,7 @@ public class StudentSelectedModuleController {
             if (Extra.IsAssessmentNew(AssessmentData[3])) {
                 if (Integer.parseInt(AssessmentData[0]) == selectedModule.getmoduleId()) {
                     newAssessments.add(new Assessment(AssessmentData[1], AssessmentData[2],
-                            AssessmentData[3], Integer.parseInt(AssessmentData[4]), false, -1));
+                            AssessmentData[3] + Extra.GetDifferenceInTime(AssessmentData[2], AssessmentData[3]), Integer.parseInt(AssessmentData[4]), false, -1));
                 }
             }
         }
@@ -200,8 +201,11 @@ public class StudentSelectedModuleController {
         if (selectedNewAssessment == null){
             AlertHandler.showErrorAlert("Error", "Select an assessment first!", "Select an assessment from the list first and then try again");
         }else{
-            System.out.println(selectedNewAssessment.getNameProperty().get());
-            // Load assessment...
+            String AssessmentTitle = selectedNewAssessment.getNameProperty().get();
+            int AssessmentID = Integer.parseInt(SqlHandler.GetIdByAssessmentName(AssessmentTitle));
+            Map<String, String> QuestionsAndAnswers = SqlHandler.GetAssessmentDataQ(AssessmentID);
+            AlertHandler.showShortMessage("Question 1", String.format("Question: %s, answer 1: %s, answer 2: %s, answer 3: %s, corrent answer %s", QuestionsAndAnswers.get("question1"),
+                    QuestionsAndAnswers.get("question1_q1"), QuestionsAndAnswers.get("question1_q2"), QuestionsAndAnswers.get("question1_q3"), QuestionsAndAnswers.get("question1_c")));
         }
     }
 

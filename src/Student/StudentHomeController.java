@@ -46,7 +46,7 @@ public class StudentHomeController {
     public void initialize(){
         setupTableView();
         try{
-            SqlHandler = new MySQLHandler("sql2279737", "fE6!aZ7*");
+            SqlHandler = new MySQLHandler("c1841485", "6Z=q]K~GXKzcjW=d");
         }catch (Exception e){
             System.out.println(e);
         }

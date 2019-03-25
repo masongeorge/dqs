@@ -4,8 +4,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.*;
 
-// Ideas: password encryption, ...
-
 public class MySQLHandler {
 
     private Connection Con;
@@ -13,7 +11,7 @@ public class MySQLHandler {
     public MySQLHandler(String Username, String Password) {
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            Con = DriverManager.getConnection("jdbc:mysql://sql2.freesqldatabase.com/sql2279737", Username, Password);
+            Con = DriverManager.getConnection("jdbc:mysql://csmysql.cs.cf.ac.uk/c1841485", Username, Password);
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
@@ -35,7 +33,7 @@ public class MySQLHandler {
         int account = 1;
         try {
             Statement stmt = Con.createStatement();
-            String query = String.format("SELECT acc_type FROM Users WHERE username='%s'", Username);
+            String query = String.format("SELECT acc_type FROM dqs_users WHERE username='%s'", Username);
             //System.out.println(query);
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
@@ -53,7 +51,7 @@ public class MySQLHandler {
     public Boolean RegisterAccount(String AccName, String Username, String Password, String AccountType) {
         Boolean ret = false;
         try {
-            String query ="INSERT INTO Users (name, username, password, acc_type)"
+            String query ="INSERT INTO dqs_users (name, username, password, acc_type)"
                     + " VALUES (?, ?, ?, ?)";
 
             PreparedStatement preparedStmt = Con.prepareStatement(query);
@@ -74,7 +72,7 @@ public class MySQLHandler {
     public Boolean DeleteAccount(int Id) {
         Boolean ret = false;
         try {
-            String query = "DELETE FROM Users WHERE id = ?";
+            String query = "DELETE FROM dqs_users WHERE id = ?";
 
             PreparedStatement preparedStmt = Con.prepareStatement(query);
             preparedStmt.setInt(1, Id);
@@ -92,7 +90,7 @@ public class MySQLHandler {
         Boolean ret = false;
         try {
             Statement stmt = Con.createStatement();
-            String query = String.format("SELECT COUNT(*) AS N FROM Users WHERE username='%s' and password='%s'", Username, Password);
+            String query = String.format("SELECT COUNT(*) AS N FROM dqs_users WHERE username='%s' and password='%s'", Username, Password);
             //System.out.println(query);
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
@@ -111,7 +109,7 @@ public class MySQLHandler {
         String pass = "";
         try {
             Statement stmt = Con.createStatement();
-            String query = String.format("SELECT password FROM Users WHERE username='%s'", Username);
+            String query = String.format("SELECT password FROM dqs_users WHERE username='%s'", Username);
             //System.out.println(query);
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
@@ -128,7 +126,7 @@ public class MySQLHandler {
         int id = 0;
         try {
             Statement stmt = Con.createStatement();
-            String query = String.format("SELECT id FROM Users WHERE username='%s'", Username);
+            String query = String.format("SELECT id FROM dqs_users WHERE username='%s'", Username);
             //System.out.println(query);
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
@@ -146,7 +144,7 @@ public class MySQLHandler {
         List<Integer> Modules = new ArrayList<>();
         try {
             Statement stmt = Con.createStatement();
-            String query = String.format("SELECT student_module_id FROM Modules WHERE student_id='%d'", Id);
+            String query = String.format("SELECT student_module_id FROM dqs_modules WHERE student_id='%d'", Id);
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
                 Modules.add(rs.getInt("student_module_id"));
@@ -166,7 +164,7 @@ public class MySQLHandler {
 
         try {
             Statement stmt = Con.createStatement();
-            String query = String.format("SELECT id, name, acc_type FROM Users WHERE username='%s'", Username);
+            String query = String.format("SELECT id, name, acc_type FROM dqs_users WHERE username='%s'", Username);
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
                 id = String.valueOf(rs.getInt("id"));
@@ -184,7 +182,7 @@ public class MySQLHandler {
         String module = "";
         try {
             Statement stmt = Con.createStatement();
-            String query = String.format("SELECT module_name FROM ModulesData WHERE module_id='%d'", id);
+            String query = String.format("SELECT module_name FROM dqs_modulesdata WHERE module_id='%d'", id);
             //System.out.println(query);
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
@@ -201,7 +199,7 @@ public class MySQLHandler {
         String lecturer = "";
         try {
             Statement stmt = Con.createStatement();
-            String query = String.format("SELECT name from Users WHERE id = (SELECT lecturer_id FROM ModulesData WHERE module_id='%d')", id);
+            String query = String.format("SELECT name from dqs_users WHERE id = (SELECT lecturer_id FROM dqs_modulesdata WHERE module_id='%d')", id);
             //System.out.println(query);
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
@@ -223,7 +221,7 @@ public class MySQLHandler {
 
         try {
             Statement stmt = Con.createStatement();
-            String query = String.format("SELECT moduleID, title, assignedDate, dueDate, type FROM Assessments WHERE assessment_id=%d", assessmentId);
+            String query = String.format("SELECT moduleID, title, assignedDate, dueDate, type FROM dqs_assessments WHERE assessment_id=%d", assessmentId);
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
                 moduleID = rs.getString("moduleID");
@@ -244,7 +242,7 @@ public class MySQLHandler {
         List<Integer> list = new ArrayList<>();
         try {
             Statement stmt = Con.createStatement();
-            String query = String.format("SELECT assessmentID from StudentsAssessments WHERE studentID = %d", studentId);
+            String query = String.format("SELECT assessmentID from dqs_studentsassessments WHERE studentID = %d", studentId);
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
                 list.add(rs.getInt("assessmentID"));
@@ -260,7 +258,7 @@ public class MySQLHandler {
         List<Integer> list = new ArrayList<>();
         try {
             Statement stmt = Con.createStatement();
-            String query = String.format("SELECT assessmentID from StudentsAssessments WHERE studentID = %d AND completed = '1'", studentId);
+            String query = String.format("SELECT assessmentID from dqs_studentsassessments WHERE studentID = %d AND completed = '1'", studentId);
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
                 list.add(rs.getInt("assessmentID"));
@@ -276,7 +274,7 @@ public class MySQLHandler {
         String result = "";
         try {
             Statement stmt = Con.createStatement();
-            String query = String.format("SELECT result from StudentsAssessments WHERE assessmentID = %d", AssessmentId);
+            String query = String.format("SELECT result from dqs_studentsassessments WHERE assessmentID = %d", AssessmentId);
             //System.out.println(query);
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
@@ -287,5 +285,68 @@ public class MySQLHandler {
             System.out.println(e.getMessage());
         }
         return result;
+    }
+
+    public String GetIdByAssessmentName(String AssessmentName) {
+        String result = "";
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT assessment_id from dqs_assessments WHERE title = '%s'", AssessmentName);
+            //System.out.println(query);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                result = rs.getString("assessment_id");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
+
+    public List<String> GetAssessmentIndexes(int AssessmentId) {
+        String result = "";
+        List<String> indexes = new ArrayList<String>();
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT indexes from dqs_assessments WHERE assessment_id = %d", AssessmentId);
+            //System.out.println(query);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                result = rs.getString("indexes");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
+        String[] parts = result.split(";");
+        for (String part : parts) {
+            indexes.add(part);
+        }
+        return indexes;
+    }
+
+    public Map<String ,String> GetAssessmentDataQ(int AssessmentId) {
+        Map<String, String> map = new HashMap<String, String>();
+        List<String> indexes = GetAssessmentIndexes(AssessmentId);
+
+        for (String index : indexes) {
+            try {
+                Statement stmt = Con.createStatement();
+                String query = String.format("SELECT qora, content FROM dqs_qanda WHERE " +
+                        "(SELECT content FROM dqs_qanda WHERE qora = 'question%s_t') = 'm' AND qora='question%s' OR qora = 'question%s_q1' " +
+                        "OR qora = 'question%s_q2' OR qora = 'question%s_q3' or qora = 'question%s_c'", index, index, index, index, index, index);
+                //System.out.println(query);
+                ResultSet rs = stmt.executeQuery(query);
+                while(rs.next()) {
+                    map.put(rs.getString("qora"), rs.getString("content"));
+                }
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return map;
     }
 }

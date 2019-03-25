@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="643.0" prefWidth="734.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Student.StudentSelectedModuleController">
+<AnchorPane prefHeight="643.0" prefWidth="734.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Student.StudentSelectedModuleController">
    <children>
       <Label fx:id="moduleLabel" alignment="CENTER" layoutX="5.0" layoutY="23.0" prefHeight="27.0" prefWidth="727.0" text="ModuleName" textFill="#901919">
          <font>
@@ -27,16 +27,16 @@
       </Label>
       <TableView fx:id="newTableView" layoutX="14.0" layoutY="137.0" prefHeight="159.0" prefWidth="705.0">
         <columns>
-          <TableColumn fx:id="newNameColumn" prefWidth="208.0" text="Name" />
-          <TableColumn fx:id="newAssignedColumn" minWidth="5.0" prefWidth="178.0" text="Assigned date" />
-            <TableColumn fx:id="newDueCOlumn" prefWidth="178.0" text="Due date" />
-            <TableColumn fx:id="newTypeColumn" minWidth="0.0" prefWidth="139.0" text="Type" />
+          <TableColumn fx:id="newNameColumn" prefWidth="195.0" text="Name" />
+          <TableColumn fx:id="newAssignedColumn" minWidth="5.0" prefWidth="112.0" text="Assigned date" />
+            <TableColumn fx:id="newDueCOlumn" prefWidth="275.0" text="Due date" />
+            <TableColumn fx:id="newTypeColumn" minWidth="0.0" prefWidth="121.0" text="Type" />
         </columns>
       </TableView>
       <TableView fx:id="completedTableView" layoutX="16.0" layoutY="417.0" prefHeight="159.0" prefWidth="705.0">
          <columns>
             <TableColumn fx:id="completedNameColumn" prefWidth="193.0" text="Name" />
-            <TableColumn fx:id="completedDueColumn" minWidth="5.0" prefWidth="154.0" text="Due date" />
+            <TableColumn fx:id="completedDueColumn" minWidth="5.0" prefWidth="154.0" text="Date" />
             <TableColumn fx:id="completedTypeColumn" prefWidth="133.0" text="Type" />
             <TableColumn fx:id="completedResultColumn" minWidth="0.0" prefWidth="102.0" text="Result" />
             <TableColumn fx:id="completedRetakeColumn" prefWidth="120.0" text="Retake Possible" />
