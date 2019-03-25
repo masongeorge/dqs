@@ -327,7 +327,15 @@ public class MySQLHandler {
         return indexes;
     }
 
-    public Map<String ,String> GetAssessmentDataQ(int AssessmentId) {
+    // Get all multiple choice questions and answers
+    // Key: question%D
+    // Key: question%D_q1
+    // Key: question%D_q2
+    // Key: question%D_q3
+    // Key: question%D_c
+    // WHERE: D - question index
+    // _c -> correct answer
+    public Map<String ,String> GetMultipleChoiceQ(int AssessmentId) {
         Map<String, String> map = new HashMap<String, String>();
         List<String> indexes = GetAssessmentIndexes(AssessmentId);
 
@@ -335,8 +343,36 @@ public class MySQLHandler {
             try {
                 Statement stmt = Con.createStatement();
                 String query = String.format("SELECT qora, content FROM dqs_qanda WHERE " +
-                        "(SELECT content FROM dqs_qanda WHERE qora = 'question%s_t') = 'm' AND qora='question%s' OR qora = 'question%s_q1' " +
-                        "OR qora = 'question%s_q2' OR qora = 'question%s_q3' or qora = 'question%s_c'", index, index, index, index, index, index);
+                        "((SELECT content FROM dqs_qanda WHERE qora = 'question%s_t') = 'm') AND (qora='question%s' OR qora = 'question%s_q1' " +
+                        "OR qora = 'question%s_q2' OR qora = 'question%s_q3' or qora = 'question%s_c')", index, index, index, index, index, index);
+                //System.out.println(query);
+                ResultSet rs = stmt.executeQuery(query);
+                while(rs.next()) {
+                    map.put(rs.getString("qora"), rs.getString("content"));
+                }
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return map;
+    }
+
+    // Get all regular questions and answers
+    // Key: question%D
+    // Key: question%D_c
+    // WHERE: D - question index
+    // _c -> correct answer
+    public Map<String ,String> GerRegularQ(int AssessmentId) {
+        Map<String, String> map = new HashMap<String, String>();
+        List<String> indexes = GetAssessmentIndexes(AssessmentId);
+
+        for (String index : indexes) {
+            try {
+                Statement stmt = Con.createStatement();
+                String query = String.format("SELECT qora, content FROM dqs_qanda WHERE " +
+                        "((SELECT content FROM dqs_qanda WHERE qora = 'question%s_t') = 'n') AND " +
+                        "(qora='question%s' OR qora = 'question%s_c')", index, index, index);
                 //System.out.println(query);
                 ResultSet rs = stmt.executeQuery(query);
                 while(rs.next()) {

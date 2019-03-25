@@ -3,10 +3,7 @@ package Student;
 import Helpers.AlertHandler;
 import Helpers.Extra;
 import Helpers.MySQLHandler;
-import Model.Assessment;
-import Model.StudentModule;
-import Model.StudentUser;
-import Model.User;
+import Model.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -202,21 +199,66 @@ public class StudentSelectedModuleController {
             AlertHandler.showErrorAlert("Error", "Select an assessment first!", "Select an assessment from the list first and then try again");
         }else{
             String AssessmentTitle = selectedNewAssessment.getNameProperty().get();
-            int AssessmentID = Integer.parseInt(SqlHandler.GetIdByAssessmentName(AssessmentTitle));
-            Map<String, String> QuestionsAndAnswers = SqlHandler.GetAssessmentDataQ(AssessmentID);
-            AlertHandler.showShortMessage("Question 1", String.format("Question: %s, answer 1: %s, answer 2: %s, answer 3: %s, corrent answer %s", QuestionsAndAnswers.get("question1"),
-                    QuestionsAndAnswers.get("question1_q1"), QuestionsAndAnswers.get("question1_q2"), QuestionsAndAnswers.get("question1_q3"), QuestionsAndAnswers.get("question1_c")));
+            loadTest(AssessmentTitle);
         }
     }
 
-    public void onCheckAnswers(){
-        if (selectedCompletedAssessment == null){
-            AlertHandler.showErrorAlert("Error", "Select an assessment first!", "Select an assessment from the list first and then try again");
+    public void loadMultipleQuestion(Test test){
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/Student/StudentTakesMultipleChoiceUI.fxml"));
+            loader.load();
+            StudentTakesMultipleChoice controller = loader.getController();
+            controller.initData(user, test, 0, selectedModule);
+
+            Parent parent = loader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle("Answer the questions");
+            stage.setScene(new Scene(parent, 600, 400));
+            stage.setResizable(false);
+            stage.show();
+
+            closeScreen();
+        }catch (Exception e){
+            System.out.println("Error: " + e);
+        }
+    }
+
+    public void loadTextQuestion(Test test){
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/Student/StudentTakesTextUI.fxml"));
+            loader.load();
+            StudentTakesText controller = loader.getController();
+            controller.initData(user, test, 0, selectedModule);
+
+            Parent parent = loader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle("Answer the questions");
+            stage.setScene(new Scene(parent, 600, 400));
+            stage.setResizable(false);
+            stage.show();
+
+            closeScreen();
+        }catch (Exception e){
+            System.out.println("Error: " + e);
+        }
+    }
+
+    public void loadTest(String AssessmentTitle){
+        int AssessmentID = Integer.parseInt(SqlHandler.GetIdByAssessmentName(AssessmentTitle));
+
+        Map<String, String> GetMultipleChoice = SqlHandler.GetMultipleChoiceQ(AssessmentID);
+        Map<String, String> GetRegular = SqlHandler.GerRegularQ(AssessmentID);
+        int startQuestionIndex = Integer.parseInt(SqlHandler.GetAssessmentIndexes(AssessmentID).get(0));
+        Test test = new Test(GetMultipleChoice, GetRegular, startQuestionIndex);
+
+        if(test.isQuestionMultiple(0)){
+            // First Question is multiple choice type
+            loadMultipleQuestion(test);
         }else{
-            System.out.println(selectedCompletedAssessment.getNameProperty().get());
-            if (selectedCompletedAssessment.isCheckAnswersPossible()){
-                // Check answers...
-            }
+            // First Question is text type
+            loadTextQuestion(test);
         }
     }
 
@@ -225,7 +267,9 @@ public class StudentSelectedModuleController {
             AlertHandler.showErrorAlert("Error", "Select an assessment first!", "Select an assessment from the list first and then try again");
         }else{
             if (selectedCompletedAssessment.isRetakePossible()){
-                // Load re-take screen
+                // Load re-take
+                String AssessmentTitle = selectedCompletedAssessment.getNameProperty().get();
+                loadTest(AssessmentTitle);
             }else{
                 AlertHandler.showShortMessage("Error!", "You can only retake formative tests which you haven't completed yet");
             }

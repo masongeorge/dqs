@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Student.StudentTakesMultipleChoice">
+    <children>
+        <Label layoutX="70.0" layoutY="45.0" prefHeight="34.0" prefWidth="109.0" text="Question:" textFill="#a40000">
+            <font>
+                <Font name="System Bold" size="23.0" />
+            </font></Label>
+        <Label fx:id="counterLabel" layoutX="179.0" layoutY="45.0" prefHeight="34.0" prefWidth="109.0" text="#number" textFill="#a40000">
+            <font>
+                <Font name="System Bold" size="23.0" />
+            </font>
+        </Label>
+        <RadioButton fx:id="answer1Radio" layoutX="68.0" layoutY="186.0" mnemonicParsing="false" onAction="#onAnswer1Radio" prefHeight="28.0" prefWidth="475.0" style="-fx-background-color: #eaeaea;" text="#A1">
+            <font>
+                <Font size="19.0" />
+            </font></RadioButton>
+        <Label fx:id="questionLabel" layoutX="70.0" layoutY="79.0" prefHeight="85.0" prefWidth="475.0" style="-fx-border-color: black;" text="#question" wrapText="true">
+            <font>
+                <Font name="System Bold" size="17.0" />
+            </font>
+            <padding>
+                <Insets bottom="3.0" left="3.0" right="3.0" top="3.0" />
+            </padding>
+        </Label>
+        <Button fx:id="nextButton" layoutX="446.0" layoutY="337.0" mnemonicParsing="false" onAction="#onNext" text="Next Question">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Button>
+        <Button fx:id="previousButton" layoutX="14.0" layoutY="337.0" mnemonicParsing="false" onAction="#onPrevious" text="Prev Question">
+            <font>
+                <Font size="18.0" />
+            </font>
+        </Button>
+        <RadioButton fx:id="answer2Radio" layoutX="68.0" layoutY="229.0" mnemonicParsing="false" onAction="#onAnswer2Radio" prefHeight="28.0" prefWidth="475.0" style="-fx-background-color: #eaeaea;" text="#A2">
+            <font>
+                <Font size="19.0" />
+            </font>
+        </RadioButton>
+        <RadioButton fx:id="answer3Radio" layoutX="68.0" layoutY="272.0" mnemonicParsing="false" onAction="#onAnswer3Radio" prefHeight="28.0" prefWidth="475.0" style="-fx-background-color: #eaeaea;" text="#A3">
+            <font>
+                <Font size="19.0" />
+            </font>
+        </RadioButton>
+        <Button layoutX="519.0" layoutY="20.0" mnemonicParsing="false" onAction="#onExit" prefHeight="25.0" prefWidth="66.0" text="Exit" />
+    </children>
+</AnchorPane>

@@ -123,7 +123,7 @@ public class StudentHomeController {
 
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
-            stage.setTitle("Maths");
+            stage.setTitle("Your Module");
             stage.setScene(new Scene(parent, 734, 643));
             stage.setResizable(false);
             stage.show();
