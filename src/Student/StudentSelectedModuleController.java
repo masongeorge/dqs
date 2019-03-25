@@ -203,9 +203,19 @@ public class StudentSelectedModuleController {
         }else{
             String AssessmentTitle = selectedNewAssessment.getNameProperty().get();
             int AssessmentID = Integer.parseInt(SqlHandler.GetIdByAssessmentName(AssessmentTitle));
-            Map<String, String> QuestionsAndAnswers = SqlHandler.GetAssessmentDataQ(AssessmentID);
-            AlertHandler.showShortMessage("Question 1", String.format("Question: %s, answer 1: %s, answer 2: %s, answer 3: %s, corrent answer %s", QuestionsAndAnswers.get("question1"),
-                    QuestionsAndAnswers.get("question1_q1"), QuestionsAndAnswers.get("question1_q2"), QuestionsAndAnswers.get("question1_q3"), QuestionsAndAnswers.get("question1_c")));
+            Map<String, String> GetMultipleChoice = SqlHandler.GetMultipleChoiceQ(AssessmentID);
+            Map<String, String> GerRegular = SqlHandler.GerRegularQ(AssessmentID);
+
+            // test run
+            //for(String key: GetMultipleChoice.keySet())
+            //    AlertHandler.showShortMessage("", key);
+
+            // test run
+            //for(String key: GerRegular.keySet())
+            //    AlertHandler.showShortMessage("", key);
+
+            AlertHandler.showShortMessage("Question 1", String.format("Question: %s, answer 1: %s, answer 2: %s, answer 3: %s, corrent answer %s", GetMultipleChoice.get("question1"),
+                    GetMultipleChoice.get("question1_q1"), GetMultipleChoice.get("question1_q2"), GetMultipleChoice.get("question1_q3"), GetMultipleChoice.get("question1_c")));
         }
     }
 
