@@ -12,13 +12,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
-import java.util.List;
-import java.util.Map;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 public class StudentSelectedModuleController {
 
@@ -97,6 +95,7 @@ public class StudentSelectedModuleController {
 
     */
     private StudentUser user;
+    private SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     @FXML
     public void initialize(){
@@ -167,8 +166,8 @@ public class StudentSelectedModuleController {
             if (Extra.IsAssessmentNew(AssessmentData[3])) {
                 if (Integer.parseInt(AssessmentData[0]) == selectedModule.getmoduleId()) {
                     if (!SqlHandler.IsAssessmentCompleted(StudentAssessment)) {
-                        newAssessments.add(new Assessment(AssessmentData[1], AssessmentData[2],
-                                AssessmentData[3] + Extra.GetDifferenceInTime(AssessmentData[2], AssessmentData[3]), Integer.parseInt(AssessmentData[4]), false, -1));
+                        newAssessments.add(new Assessment(AssessmentData[1], AssessmentData[2].substring(0, 10),
+                                AssessmentData[3].substring(0, 10) + Extra.GetDifferenceInTime(AssessmentData[2], AssessmentData[3]), Integer.parseInt(AssessmentData[4]), false, -1));
                     }
                 }
             }
@@ -183,7 +182,7 @@ public class StudentSelectedModuleController {
             String[] AssessmentData = SqlHandler.GetAssessmentData(StudentAssessment);
             if (Integer.parseInt(AssessmentData[0]) == selectedModule.getmoduleId()) {
                 completedAssessments.add(new Assessment(AssessmentData[1], AssessmentData[2],
-                        AssessmentData[3], Integer.parseInt(AssessmentData[4]), false,
+                        AssessmentData[3].substring(0, 10), Integer.parseInt(AssessmentData[4]), false,
                         Double.valueOf(SqlHandler.GetAssessmentResult(StudentAssessment))));
             }
         }
@@ -203,7 +202,21 @@ public class StudentSelectedModuleController {
             String AssessmentTitle = selectedNewAssessment.getNameProperty().get();
             int AssessmentID = Integer.parseInt(SqlHandler.GetIdByAssessmentName(AssessmentTitle));
             if (!SqlHandler.GetAssessmentIndexes(AssessmentID).isEmpty() && SqlHandler.GetAssessmentIndexes(AssessmentID).size() != 1) {
-                loadTest(AssessmentTitle);
+                if (!selectedNewAssessment.isRetakePossible()) {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Confirmation Dialog");
+                    alert.setHeaderText("You are about to start a formative assessment");
+                    alert.setContentText("You will not be able to retake this test later, are you sure you want to continue?");
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.get() == ButtonType.OK){
+                        loadTest(AssessmentTitle);
+                    } else {
+                        //
+                    }
+
+                } else {
+                    loadTest(AssessmentTitle);
+                }
             } else {
                 AlertHandler.showErrorAlert("Error", "Error loading assessment data", "An error occured while loading assessment questions.");
             }

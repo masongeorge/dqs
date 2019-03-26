@@ -13,7 +13,7 @@ public class AlertHandler {
     }
 
     public static void showSuccessAlert(String title, String content){
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);

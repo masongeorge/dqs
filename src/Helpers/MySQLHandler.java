@@ -215,9 +215,9 @@ public class MySQLHandler {
     public String[] GetAssessmentData(int assessmentId) {
         String moduleID = "";
         String title = "";
-        String assignedDate = "";
-        String dueDate = "";
         String atype = "";
+        Timestamp timestamp = null;
+        Timestamp timestamp1 = null;
 
         try {
             Statement stmt = Con.createStatement();
@@ -226,14 +226,18 @@ public class MySQLHandler {
             while(rs.next()) {
                 moduleID = rs.getString("moduleID");
                 title = rs.getString("title");
-                assignedDate = String.valueOf(rs.getDate("assignedDate"));
-                dueDate = String.valueOf(rs.getDate("dueDate"));
+                timestamp = rs.getTimestamp("assignedDate");
+                timestamp1 = rs.getTimestamp("dueDate");
                 atype = String.valueOf(rs.getInt("type"));
             }
         }
         catch (Exception e) {
             System.out.println(e.getMessage());
         }
+
+        String assignedDate = String.valueOf(timestamp);
+        String dueDate = String.valueOf(timestamp1);
+
         return new String[] {moduleID, title, assignedDate, dueDate, atype};
     }
 

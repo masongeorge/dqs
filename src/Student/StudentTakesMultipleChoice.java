@@ -201,16 +201,11 @@ public class StudentTakesMultipleChoice {
         int correctAnswers = test.correctAnswers();
         int wrongAnswers = test.wrongAnswers();
 
-        System.out.println(userScore);
-        System.out.println(percent);
-        System.out.println(correctAnswers);
-        System.out.println(wrongAnswers);
-
         // NEED TO UPLOAD THOSE
 
         int AssessmentId = test.GetAssessmentId();
         if (SqlHandler.UpdateUserStatistics(AssessmentId, String.valueOf(percent)) &&
-                SqlHandler.UpdateStatistics(user.getId(), AssessmentId, userScore, correctAnswers, wrongAnswers)) {
+                SqlHandler.UpdateStatistics(user.getId(), AssessmentId, percent, correctAnswers, wrongAnswers)) {
             AlertHandler.showSuccessAlert("Test submission successful", "Test has been successfully submitted, you may now exit!");
         } else {
             AlertHandler.showErrorAlert("Error", "Error", "Error occured while saving test data.");
