@@ -7,9 +7,11 @@ public class Test {
     public String answers[] = {"","","","",""};
     private int corrects = 0;
     private int wrongs = 0;
+    private int AssessmentID;
 
-    public Test(Map<String, String> multipleChoices, Map<String, String> regulars, int question1Number){
+    public Test(Map<String, String> multipleChoices, Map<String, String> regulars, int question1Number, int assessment){
         // Registering each question
+        AssessmentID = assessment;
         int questionIndex = question1Number;
         while(questionIndex < question1Number+5){
             String questionID = "question" + questionIndex;
@@ -65,6 +67,9 @@ public class Test {
         return wrongs;
     }
 
+    public int GetAssessmentId(){
+        return AssessmentID;
+    }
 
 }
 

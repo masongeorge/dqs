@@ -385,4 +385,67 @@ public class MySQLHandler {
         }
         return map;
     }
+
+    public Boolean UpdateStatistics(int studentID, int assessmentID, double score, int correctAnswers, int wrongAnswers) {
+        Boolean ret = false;
+        try {
+            String query ="INSERT INTO dqs_statistics (studentID, assesmentID, score, correct, wrong)"
+                    + " VALUES (?, ?, ?, ?, ?)";
+
+            PreparedStatement preparedStmt = Con.prepareStatement(query);
+            preparedStmt.setInt (1, studentID);
+            preparedStmt.setInt (2, assessmentID);
+            preparedStmt.setString (3, String.valueOf(score));
+            preparedStmt.setString   (4, String.valueOf(correctAnswers));
+            preparedStmt.setString   (5, String.valueOf(wrongAnswers));
+
+            preparedStmt.execute();
+            ret = true;
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return ret;
+    }
+
+    public Boolean UpdateUserStatistics(int assessmentID, String resultScore) {
+        Boolean ret = false;
+        try {
+            String query ="UPDATE dqs_studentsassessments SET completed = '1' , result = ? WHERE assessmentID = ?";
+
+            PreparedStatement preparedStmt = Con.prepareStatement(query);
+            preparedStmt.setString (1, resultScore);
+            preparedStmt.setInt (2, assessmentID);
+
+            preparedStmt.execute();
+            ret = true;
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return ret;
+    }
+
+
+    public Boolean IsAssessmentCompleted(int AssessmentId) {
+        String result = "";
+        Boolean res = true;
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT completed from dqs_studentsassessments WHERE assessmentID = %d", AssessmentId);
+            //System.out.println(query);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                result = rs.getString("completed");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        if (Integer.parseInt(result) == 0) {
+            res = false;
+        }
+        return res;
+    }
+
 }

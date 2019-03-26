@@ -1,5 +1,7 @@
 package Student;
 
+import Helpers.AlertHandler;
+import Helpers.MySQLHandler;
 import Model.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -37,9 +39,15 @@ public class StudentTakesText {
 
     private int currentQuestionIndex;
 
+    private MySQLHandler SqlHandler;
+
     @FXML
     public void initialize(){
-
+        try{
+            SqlHandler = new MySQLHandler("c1841485", "6Z=q]K~GXKzcjW=d");
+        }catch (Exception e){
+            System.out.println(e);
+        }
     }
 
     public void initData(StudentUser user, Test test, int currentQuestionIndex, StudentModule selectedModule){
@@ -171,7 +179,13 @@ public class StudentTakesText {
         System.out.println(correctAnswers);
         System.out.println(wrongAnswers);
 
-        // NEED TO UPLOAD THOSE
+        int AssessmentId = test.GetAssessmentId();
+        if (SqlHandler.UpdateUserStatistics(AssessmentId, String.valueOf(percent)) &&
+                SqlHandler.UpdateStatistics(user.getId(), AssessmentId, userScore, correctAnswers, wrongAnswers)) {
+            AlertHandler.showSuccessAlert("Test submission successful", "Test has been successfully submitted, you may now exit!");
+        } else {
+            AlertHandler.showErrorAlert("Error", "Error", "Error occured while saving test data.");
+        }
 
         // Going back to module selected screen
         onExit();

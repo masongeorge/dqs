@@ -166,8 +166,10 @@ public class StudentSelectedModuleController {
             String[] AssessmentData = SqlHandler.GetAssessmentData(StudentAssessment);
             if (Extra.IsAssessmentNew(AssessmentData[3])) {
                 if (Integer.parseInt(AssessmentData[0]) == selectedModule.getmoduleId()) {
-                    newAssessments.add(new Assessment(AssessmentData[1], AssessmentData[2],
-                            AssessmentData[3] + Extra.GetDifferenceInTime(AssessmentData[2], AssessmentData[3]), Integer.parseInt(AssessmentData[4]), false, -1));
+                    if (!SqlHandler.IsAssessmentCompleted(StudentAssessment)) {
+                        newAssessments.add(new Assessment(AssessmentData[1], AssessmentData[2],
+                                AssessmentData[3] + Extra.GetDifferenceInTime(AssessmentData[2], AssessmentData[3]), Integer.parseInt(AssessmentData[4]), false, -1));
+                    }
                 }
             }
         }
@@ -199,7 +201,12 @@ public class StudentSelectedModuleController {
             AlertHandler.showErrorAlert("Error", "Select an assessment first!", "Select an assessment from the list first and then try again");
         }else{
             String AssessmentTitle = selectedNewAssessment.getNameProperty().get();
-            loadTest(AssessmentTitle);
+            int AssessmentID = Integer.parseInt(SqlHandler.GetIdByAssessmentName(AssessmentTitle));
+            if (!SqlHandler.GetAssessmentIndexes(AssessmentID).isEmpty() && SqlHandler.GetAssessmentIndexes(AssessmentID).size() != 1) {
+                loadTest(AssessmentTitle);
+            } else {
+                AlertHandler.showErrorAlert("Error", "Error loading assessment data", "An error occured while loading assessment questions.");
+            }
         }
     }
 
@@ -251,7 +258,7 @@ public class StudentSelectedModuleController {
         Map<String, String> GetMultipleChoice = SqlHandler.GetMultipleChoiceQ(AssessmentID);
         Map<String, String> GetRegular = SqlHandler.GerRegularQ(AssessmentID);
         int startQuestionIndex = Integer.parseInt(SqlHandler.GetAssessmentIndexes(AssessmentID).get(0));
-        Test test = new Test(GetMultipleChoice, GetRegular, startQuestionIndex);
+        Test test = new Test(GetMultipleChoice, GetRegular, startQuestionIndex, AssessmentID);
 
         if(test.isQuestionMultiple(0)){
             // First Question is multiple choice type
