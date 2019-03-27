@@ -18,6 +18,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class LecturerCreatesModuleController {
 
     @FXML
@@ -42,6 +45,8 @@ public class LecturerCreatesModuleController {
 
     private int selectedIndex;
 
+    private List<Integer> StudentsToEnroll = new ArrayList<>();
+
     @FXML
     public void initialize(){
         setupTableView();
@@ -59,11 +64,11 @@ public class LecturerCreatesModuleController {
 
     public void loadStudentStatuses(){
         studentStatuses = FXCollections.observableArrayList();
-        StudentStatus student1 = new StudentStatus(1, "Jack Jeniffer", "Removed");
-        StudentStatus student2 = new StudentStatus(1, "Peter Jeniffer", "Removed");
-
-        studentStatuses.add(student1);
-        studentStatuses.add(student2);
+        List<Integer> Students = SqlHandler.GetAllStudents();
+        for (int st : Students) {
+            StudentStatus student = new StudentStatus(st, SqlHandler.GetNameById(st), "-");
+            studentStatuses.add(student);
+        }
 
         studentsTable.setItems(studentStatuses);
         studentsTable.refresh();
@@ -109,9 +114,16 @@ public class LecturerCreatesModuleController {
         if(selectedStudentStatus == null){
             AlertHandler.showShortMessage("Error", "Make sure to select a student first!");
         }else{
-            // Add user to the module and update status
-            selectedStudentStatus.setStudentStatus("Added");
-            studentStatuses.set(selectedIndex, selectedStudentStatus);
+            if (StudentsToEnroll.contains(selectedStudentStatus.getUserID())) {
+                AlertHandler.showShortMessage("Error",
+                        String.format("You have already added %s to the module!", selectedStudentStatus.getStudentName()));
+            } else {
+                StudentsToEnroll.add(selectedStudentStatus.getUserID());
+                selectedStudentStatus.setStudentStatus("Added");
+                studentStatuses.set(selectedIndex, selectedStudentStatus);
+                AlertHandler.showSuccessAlert("Student added successfully",
+                        String.format(selectedStudentStatus.getStudentName() + " has been successfully added to the module!"));
+            }
         }
     }
 
@@ -119,9 +131,18 @@ public class LecturerCreatesModuleController {
         if(selectedStudentStatus == null){
             AlertHandler.showShortMessage("Error", "Make sure to select a student first!");
         }else{
-            // Remove user from the module and update status
-            selectedStudentStatus.setStudentStatus("Removed");
-            studentStatuses.set(selectedIndex, selectedStudentStatus);
+            if (StudentsToEnroll.contains(selectedStudentStatus.getUserID())) {
+                // Remove user from the module and update status
+                selectedStudentStatus.setStudentStatus("Removed");
+                studentStatuses.set(selectedIndex, selectedStudentStatus);
+                StudentsToEnroll.remove(new Integer(selectedStudentStatus.getUserID()));
+                AlertHandler.showSuccessAlert("Student removed successfully",
+                        String.format(selectedStudentStatus.getStudentName() + " has been successfully removed from the module!"));
+
+            } else {
+                AlertHandler.showShortMessage("Error",
+                        String.format("You have already removed %s from the module!", selectedStudentStatus.getStudentName()));
+            }
         }
     }
 
@@ -131,7 +152,19 @@ public class LecturerCreatesModuleController {
     }
 
     public void onSave(){
-
+        // Create the module
+        if (SqlHandler.CreateNewModule(nameField.getText(), lecturer.getId())) {
+            for (int st : StudentsToEnroll) {
+                SqlHandler.EnrollStudent(st, SqlHandler.GetLastModuleId());
+            }
+            AlertHandler.showErrorAlert("Module created successfully",
+                    String.format("Module %s has been created successfully.", nameField.getText()),
+                    "All the students have been added to the module successfully.");
+            StudentsToEnroll.clear();
+            onBack();
+        } else {
+            AlertHandler.showShortMessage("Error", "Error occured while creating a module!");
+        }
     }
 
 }

@@ -18,6 +18,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
+import java.util.List;
+
 public class LecturerSelectedModuleController {
     @FXML
     private Label moduleLabel;
@@ -66,12 +68,15 @@ public class LecturerSelectedModuleController {
 
     public void loadStudentStatuses(){
         studentStatuses = FXCollections.observableArrayList();
-        StudentStatus student1 = new StudentStatus(1, "Jack Jeniffer", "Added");
-        StudentStatus student2 = new StudentStatus(1, "Peter Jeniffer", "Removed");
-
-        studentStatuses.add(student1);
-        studentStatuses.add(student2);
-
+        List<Integer> Students = SqlHandler.GetAllStudents();
+        for (int st : Students) {
+            String status = "-";
+            if (SqlHandler.IsStudentEnrolled(st, selectedModule.getModuleID())) {
+                status = "Enrolled";
+            }
+            StudentStatus student = new StudentStatus(st, SqlHandler.GetNameById(st), status);
+            studentStatuses.add(student);
+        }
         studentsTable.setItems(studentStatuses);
         studentsTable.refresh();
     }
@@ -104,8 +109,14 @@ public class LecturerSelectedModuleController {
             AlertHandler.showShortMessage("Error", "Make sure to select a student first!");
         }else{
             // Add user to the module and update status
-            selectedStudentStatus.setStudentStatus("Added");
-            studentStatuses.set(selectedIndex, selectedStudentStatus);
+            if (SqlHandler.EnrollStudent(selectedStudentStatus.getUserID(), selectedModule.getModuleID())) {
+                selectedStudentStatus.setStudentStatus("Enrolled");
+                studentStatuses.set(selectedIndex, selectedStudentStatus);
+                AlertHandler.showSuccessAlert("Student added successfully",
+                        String.format(selectedStudentStatus.getStudentName() + " has been successfully added to the module!"));
+            } else {
+                AlertHandler.showShortMessage("Error", "Error occured while trying to enroll the student from the module");
+            }
         }
     }
 
@@ -114,8 +125,14 @@ public class LecturerSelectedModuleController {
             AlertHandler.showShortMessage("Error", "Make sure to select a student first!");
         }else{
             // Remove user from the module and update status
-            selectedStudentStatus.setStudentStatus("Removed");
-            studentStatuses.set(selectedIndex, selectedStudentStatus);
+            if (SqlHandler.DelModuleStudent(selectedStudentStatus.getUserID(), selectedModule.getModuleID())) {
+                selectedStudentStatus.setStudentStatus("-");
+                studentStatuses.set(selectedIndex, selectedStudentStatus);
+                AlertHandler.showSuccessAlert("Student removed successfully",
+                        String.format(selectedStudentStatus.getStudentName() + " has been successfully removed from the module!"));
+            } else {
+                AlertHandler.showShortMessage("Error", "Error occured while removing the student from the module");
+            }
         }
     }
 

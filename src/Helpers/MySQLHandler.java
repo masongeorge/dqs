@@ -1,5 +1,7 @@
 package Helpers;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
+
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.*;
@@ -467,5 +469,134 @@ public class MySQLHandler {
             System.out.println(e.getMessage());
         }
         return map;
+    }
+
+    public List<Integer> GetAllStudents() {
+        String result = "";
+        List<Integer> students = new ArrayList<Integer>();
+        try {
+            Statement stmt = Con.createStatement();
+            String query = "SELECT id from dqs_users WHERE acc_type = '0'";
+            //System.out.println(query);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                students.add(rs.getInt("id"));
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return students;
+    }
+
+    public String GetNameById(int id) {
+        String name = "";
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT name FROM dqs_users WHERE id=%d", id);
+            //System.out.println(query);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                name = rs.getString("name");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            id = -1;
+        }
+        return name;
+    }
+
+    public Boolean IsStudentEnrolled(int StudentId, int ModuleId) {
+        Boolean enrolled = false;
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT COUNT(*) AS SCOUNT FROM dqs_modules " +
+                    "WHERE student_id = %d AND student_module_id=%d", StudentId, ModuleId);
+            //System.out.println(query);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                if (rs.getInt("SCOUNT") > 0) {
+                    enrolled = true;
+                }
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return enrolled;
+    }
+
+    public Boolean EnrollStudent(int StudentId, int ModuleId) {
+        Boolean ret = false;
+        if (!IsStudentEnrolled(StudentId, ModuleId)) {
+            try {
+                String query = "INSERT INTO dqs_modules (student_module_id, student_id)"
+                        + " VALUES (?, ?)";
+
+                PreparedStatement preparedStmt = Con.prepareStatement(query);
+                preparedStmt.setInt(1, ModuleId);
+                preparedStmt.setInt(2, StudentId);
+
+                preparedStmt.execute();
+                ret = true;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return ret;
+    }
+
+    public Boolean DelModuleStudent(int StudentId, int ModuleId) {
+        Boolean ret = false;
+        try {
+            String query = String.format("DELETE FROM dqs_modules WHERE student_id = ? AND student_module_id = ?");
+
+            PreparedStatement preparedStmt = Con.prepareStatement(query);
+            preparedStmt.setInt (1, StudentId);
+            preparedStmt.setInt (2, ModuleId);
+
+            preparedStmt.execute();
+            ret = true;
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return ret;
+    }
+
+    public Boolean CreateNewModule(String ModuleName, int LecturerId) {
+        Boolean ret = false;
+        try {
+            String query = "INSERT INTO dqs_modulesdata (module_id, module_name, lecturer_id) " +
+                    "VALUES ((select * from (SELECT MAX(module_id) from dqs_modulesdata) t) + 1, ?, ?)";
+
+            PreparedStatement preparedStmt = Con.prepareStatement(query);
+            preparedStmt.setString(1, ModuleName);
+            preparedStmt.setInt(2, LecturerId);
+
+            preparedStmt.execute();
+            ret = true;
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return ret;
+    }
+
+    public int GetLastModuleId() {
+        int id = 0;
+        try {
+            Statement stmt = Con.createStatement();
+            String query = "SELECT MAX(module_id) as MCOUNT FROM dqs_modulesdata";
+            //System.out.println(query);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                id = rs.getInt("MCOUNT");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return id;
     }
 }
