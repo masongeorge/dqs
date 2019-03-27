@@ -1,5 +1,7 @@
 package Login;
 
+import Lecturer.LecturerHomeController;
+import Model.Lecturer;
 import Model.StudentUser;
 import Student.StudentHomeController;
 import javafx.fxml.FXML;
@@ -10,7 +12,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import Model.User;
 
 import Helpers.*;
 
@@ -41,7 +42,7 @@ public class LoginController {
                 // Check if account exists
                 if (SqlHandler.CheckAccountExists(emailTextField.getText(), passwordField.getText())) {
                     // Login Success
-                    loadStudentHome();
+                    loadUserHomeScreen();
                 }else {
                     // Login Failed
                     AlertHandler.showErrorAlert("Login failed!", "Unable to login!", "Your username or password is incorrect");
@@ -63,20 +64,9 @@ public class LoginController {
             loader.load();
 
             String[] Data = SqlHandler.GetUserData(emailTextField.getText());
-            boolean at = true ? Data[1] == "1" : false;
-
             StudentHomeController controller = loader.getController();
-
-            if (at){
-                // Create and load a Lecturer User
-
-            }else{
-                // Create and load a Student User
-
-                StudentUser studentUser = new StudentUser(Integer.parseInt(Data[0]), Data[1], emailTextField.getText());
-                controller.initData(studentUser);
-            }
-
+            StudentUser studentUser = new StudentUser(Integer.parseInt(Data[0]), Data[1], emailTextField.getText());
+            controller.initData(studentUser);
 
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
@@ -88,6 +78,43 @@ public class LoginController {
             closeScreen();
         }catch (Exception e){
             System.out.println("Error: " + e);
+        }
+    }
+
+    public void loadLecturerHome(){
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/Lecturer/LecturerHomeUI.fxml"));
+            loader.load();
+
+            String[] Data = SqlHandler.GetUserData(emailTextField.getText());
+            LecturerHomeController controller = loader.getController();
+
+            Lecturer lecturer = new Lecturer(Integer.parseInt(Data[0]), Data[1], emailTextField.getText());
+            controller.initData(lecturer);
+
+            Parent parent = loader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle("Home");
+            stage.setScene(new Scene(parent, 600, 400));
+            stage.setResizable(false);
+            stage.show();
+
+            closeScreen();
+        }catch (Exception e){
+            System.out.println("Error: " + e);
+        }
+    }
+
+    public void loadUserHomeScreen(){
+        String[] Data = SqlHandler.GetUserData(emailTextField.getText());
+        boolean at = Data[2].equals("1");
+        if (at){
+            // Load Lecturer Home Screen
+            loadLecturerHome();
+        }else{
+            // Load Student Home Screen
+            loadStudentHome();
         }
     }
 

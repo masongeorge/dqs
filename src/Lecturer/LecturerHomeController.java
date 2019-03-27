@@ -54,7 +54,7 @@ public class LecturerHomeController {
     }
 
     public void loadUser(){
-        welcomeLabel.setText("Welcome username");
+        welcomeLabel.setText("Welcome " + lecturer.getName());
     }
 
     public void loadModules(){
