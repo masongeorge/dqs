@@ -205,7 +205,7 @@ public class StudentSelectedModuleController {
                 if (!selectedNewAssessment.isRetakePossible()) {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.setTitle("Confirmation Dialog");
-                    alert.setHeaderText("You are about to start a formative assessment");
+                    alert.setHeaderText("You are about to start a summative assessment");
                     alert.setContentText("You will not be able to retake this test later, are you sure you want to continue?");
                     Optional<ButtonType> result = alert.showAndWait();
                     if (result.get() == ButtonType.OK){
