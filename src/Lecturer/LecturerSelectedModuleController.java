@@ -41,6 +41,8 @@ public class LecturerSelectedModuleController {
 
     private StudentStatus selectedStudentStatus;
 
+    private int selectedIndex;
+
     @FXML
     public void initialize(){
         setupTableView();
@@ -59,13 +61,13 @@ public class LecturerSelectedModuleController {
     }
 
     public void loadModule(){
-        moduleLabel.setText("Module name");
+        moduleLabel.setText(selectedModule.getModuleName());
     }
 
     public void loadStudentStatuses(){
         studentStatuses = FXCollections.observableArrayList();
-        StudentStatus student1 = new StudentStatus(1, "Jack Jeniffer", "Present");
-        StudentStatus student2 = new StudentStatus(1, "Peter Jeniffer", "Not Present");
+        StudentStatus student1 = new StudentStatus(1, "Jack Jeniffer", "Added");
+        StudentStatus student2 = new StudentStatus(1, "Peter Jeniffer", "Removed");
 
         studentStatuses.add(student1);
         studentStatuses.add(student2);
@@ -84,6 +86,7 @@ public class LecturerSelectedModuleController {
             @Override
             public void changed(ObservableValue<? extends StudentStatus> observable, StudentStatus oldValue, StudentStatus newValue) {
                 selectedStudentStatus = newValue;
+                selectedIndex = studentStatuses.indexOf(newValue);
             }
         });
     }
@@ -101,6 +104,8 @@ public class LecturerSelectedModuleController {
             AlertHandler.showShortMessage("Error", "Make sure to select a student first!");
         }else{
             // Add user to the module and update status
+            selectedStudentStatus.setStudentStatus("Added");
+            studentStatuses.set(selectedIndex, selectedStudentStatus);
         }
     }
 
@@ -109,6 +114,8 @@ public class LecturerSelectedModuleController {
             AlertHandler.showShortMessage("Error", "Make sure to select a student first!");
         }else{
             // Remove user from the module and update status
+            selectedStudentStatus.setStudentStatus("Removed");
+            studentStatuses.set(selectedIndex, selectedStudentStatus);
         }
     }
 

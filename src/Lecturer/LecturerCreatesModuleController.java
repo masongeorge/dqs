@@ -40,6 +40,8 @@ public class LecturerCreatesModuleController {
 
     private StudentStatus selectedStudentStatus;
 
+    private int selectedIndex;
+
     @FXML
     public void initialize(){
         setupTableView();
@@ -57,8 +59,8 @@ public class LecturerCreatesModuleController {
 
     public void loadStudentStatuses(){
         studentStatuses = FXCollections.observableArrayList();
-        StudentStatus student1 = new StudentStatus(1, "Jack Jeniffer", "Not Present");
-        StudentStatus student2 = new StudentStatus(1, "Peter Jeniffer", "Not Present");
+        StudentStatus student1 = new StudentStatus(1, "Jack Jeniffer", "Removed");
+        StudentStatus student2 = new StudentStatus(1, "Peter Jeniffer", "Removed");
 
         studentStatuses.add(student1);
         studentStatuses.add(student2);
@@ -77,6 +79,7 @@ public class LecturerCreatesModuleController {
             @Override
             public void changed(ObservableValue<? extends StudentStatus> observable, StudentStatus oldValue, StudentStatus newValue) {
                 selectedStudentStatus = newValue;
+                selectedIndex = studentStatuses.indexOf(newValue);
             }
         });
     }
@@ -107,6 +110,8 @@ public class LecturerCreatesModuleController {
             AlertHandler.showShortMessage("Error", "Make sure to select a student first!");
         }else{
             // Add user to the module and update status
+            selectedStudentStatus.setStudentStatus("Added");
+            studentStatuses.set(selectedIndex, selectedStudentStatus);
         }
     }
 
@@ -115,6 +120,8 @@ public class LecturerCreatesModuleController {
             AlertHandler.showShortMessage("Error", "Make sure to select a student first!");
         }else{
             // Remove user from the module and update status
+            selectedStudentStatus.setStudentStatus("Removed");
+            studentStatuses.set(selectedIndex, selectedStudentStatus);
         }
     }
 

@@ -86,7 +86,24 @@ public class LecturerHomeController {
     }
 
     public void onCreateModule(){
-        // Load create module screen
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/Lecturer/LecturerCreatesModuleUI.fxml"));
+            loader.load();
+            LecturerCreatesModuleController controller = loader.getController();
+            controller.initData(lecturer);
+
+            Parent parent = loader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle("Create your Module!");
+            stage.setScene(new Scene(parent, 600, 400));
+            stage.setResizable(false);
+            stage.show();
+
+            closeScreen();
+        }catch (Exception e){
+            System.out.println("Error: " + e);
+        }
     }
 
     public void onSignOut(){
@@ -103,7 +120,24 @@ public class LecturerHomeController {
     }
 
     public void loadModuleScreen(){
-        // Load module screen for selected module
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/Lecturer/LecturerSelectedModuleUI.fxml"));
+            loader.load();
+            LecturerSelectedModuleController controller = loader.getController();
+            controller.initData(lecturer, selectedModule);
+
+            Parent parent = loader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle("Module");
+            stage.setScene(new Scene(parent, 600, 400));
+            stage.setResizable(false);
+            stage.show();
+
+            closeScreen();
+        }catch (Exception e){
+            System.out.println("Error: " + e);
+        }
     }
 
     public void loadLogin(){
