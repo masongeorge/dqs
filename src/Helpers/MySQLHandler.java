@@ -452,4 +452,20 @@ public class MySQLHandler {
         return res;
     }
 
+    public Map<Integer ,String> GetLecturerModules(int lecturerId) {
+        Map<Integer, String> map = new HashMap<Integer, String>();
+
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT module_id, module_name FROM dqs_modulesdata WHERE lecturer_id=%d", lecturerId);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                map.put(rs.getInt("module_id"), rs.getString("module_name"));
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return map;
+    }
 }

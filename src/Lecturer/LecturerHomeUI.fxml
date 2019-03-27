@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Lecturer.LecturerHomeController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Lecturer.LecturerHomeController">
    <children>
-      <Button layoutX="14.0" layoutY="20.0" mnemonicParsing="false" onAction="#onSignOut" text="Sign Out" />
-      <Button layoutX="439.0" layoutY="20.0" mnemonicParsing="false" onAction="#onCreateModule" text="Create New Module" />
-      <Label layoutX="95.0" layoutY="66.0" text="Module List" textFill="#e74c3c">
+      <Button layoutX="491.0" layoutY="350.0" mnemonicParsing="false" onAction="#onSignOut" text="Sign Out" />
+      <Button layoutX="432.0" layoutY="20.0" mnemonicParsing="false" onAction="#onCreateModule" text="Create New Module" />
+      <Label layoutX="74.0" layoutY="75.0" text="Module List" textFill="#e74c3c">
          <font>
             <Font name="Calibri Bold" size="20.0" />
          </font>
       </Label>
-      <Label layoutX="95.0" layoutY="99.0" text="Select a module from the list below" />
+      <Label layoutX="74.0" layoutY="108.0" text="Select a module from the list below" />
       <TableView fx:id="modulesTable" layoutX="73.0" layoutY="137.0" prefHeight="198.0" prefWidth="497.0">
         <columns>
           <TableColumn fx:id="moduleColumn" prefWidth="495.0" text="Module Name" />
         </columns>
       </TableView>
-      <Button layoutX="238.0" layoutY="350.0" mnemonicParsing="false" onAction="#onSelectModule" prefHeight="27.0" prefWidth="167.0" text="Open Selected Module" />
-      <Label fx:id="welcomeLabel" layoutX="248.0" layoutY="24.0" text="Welcome User" textFill="#158bda">
+      <Button layoutX="74.0" layoutY="350.0" mnemonicParsing="false" onAction="#onSelectModule" prefHeight="31.0" prefWidth="175.0" text="Open Selected Module" />
+      <Label fx:id="welcomeLabel" layoutX="76.0" layoutY="24.0" text="Welcome User" textFill="#158bda">
          <font>
             <Font name="System Bold" size="15.0" />
          </font>

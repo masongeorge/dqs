@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Lecturer.LecturerSelectedModuleController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Lecturer.LecturerSelectedModuleController">
    <children>
       <Label fx:id="moduleName" layoutX="234.0" layoutY="22.0" text="Module">
          <font>
             <Font size="21.0" />
          </font>
       </Label>
-      <Button layoutX="14.0" layoutY="22.0" mnemonicParsing="false" onAction="#onBack" text="Back" />
+      <Button layoutX="14.0" layoutY="22.0" mnemonicParsing="false" onAction="#onBack" prefHeight="31.0" prefWidth="71.0" text="Back" />
       <TableView fx:id="studentsTable" layoutX="22.0" layoutY="156.0" prefHeight="200.0" prefWidth="394.0">
         <columns>
           <TableColumn fx:id="nameColumn" prefWidth="229.0" text="Student Name" />
@@ -20,13 +22,13 @@
         </columns>
       </TableView>
       <Button layoutX="439.0" layoutY="242.0" mnemonicParsing="false" onAction="#onRemove" text="Remove Student" />
-      <Button layoutX="439.0" layoutY="200.0" mnemonicParsing="false" onAction="#onAdd" prefHeight="27.0" prefWidth="119.0" text="Add Student" />
+      <Button layoutX="439.0" layoutY="200.0" mnemonicParsing="false" onAction="#onAdd" prefHeight="31.0" prefWidth="129.0" text="Add Student" />
       <Label layoutX="22.0" layoutY="117.0" text="Students in the module:">
          <font>
             <Font name="System Bold" size="17.0" />
          </font>
       </Label>
       <Button layoutX="439.0" layoutY="22.0" mnemonicParsing="false" onAction="#onCreate" text="Create Assessment" />
-      <Button layoutX="441.0" layoutY="69.0" mnemonicParsing="false" onAction="#onView" prefHeight="27.0" prefWidth="137.0" text="View Assessments" />
+      <Button layoutX="441.0" layoutY="69.0" mnemonicParsing="false" onAction="#onView" prefHeight="31.0" prefWidth="144.0" text="View Assessments" />
    </children>
 </Pane>

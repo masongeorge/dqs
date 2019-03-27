@@ -18,6 +18,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
+import java.util.Map;
+
 public class LecturerHomeController {
 
     @FXML
@@ -54,18 +56,18 @@ public class LecturerHomeController {
     }
 
     public void loadUser(){
-        welcomeLabel.setText("Welcome " + lecturer.getName());
+        welcomeLabel.setText("Welcome back, " + lecturer.getName());
     }
 
     public void loadModules(){
         modules = FXCollections.observableArrayList();
-        LecturerModule module1 = new LecturerModule(1, "Maths");
-        LecturerModule module2 = new LecturerModule(1, "Phsyics");
+        Map<Integer, String> Modules = SqlHandler.GetLecturerModules(lecturer.getId());
 
-        modules.add(module1);
-        modules.add(module2);
-        lecturer.modules.add(module1);
-        lecturer.modules.add(module2);
+        for(Integer key: Modules.keySet()) {
+            LecturerModule module = new LecturerModule(key, Modules.get(key));
+            modules.add(module);
+            lecturer.modules.add(module);
+        }
 
         modulesTable.setItems(modules);
         modulesTable.refresh();
