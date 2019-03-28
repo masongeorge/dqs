@@ -16,6 +16,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
 
 public class LecturerCreatesAssessmentController {
@@ -216,7 +217,7 @@ public class LecturerCreatesAssessmentController {
         if(questions[1] == null){
             addQ2Button.setText("Add Question #2");
         }else{
-            addQ2Button.setText("Edit Question #3");
+            addQ2Button.setText("Edit Question #2");
         }
 
         if(questions[2] == null){
@@ -265,20 +266,22 @@ public class LecturerCreatesAssessmentController {
 
     public void onSave(){
         saveAssessmentInfo();
-        System.out.println(assignedHourCombo.getSelectionModel().getSelectedItem());
 
-        if (titleField.getText().length() > 0 && assignedDate.getValue() != null && dueDate.getValue() != null && assignedHourCombo.getSelectionModel().getSelectedItem() != null && assignedMinuteCombo.getSelectionModel().getSelectedItem() != null && dueHourCombo.getSelectionModel().getSelectedItem() != null && dueMinuteCombo.getSelectionModel().getSelectedItem() != null &&(summativeRadio.isSelected() || formativeRadio.isSelected()) && questions[0] != null && questions[1] != null && questions[2] != null && questions[3] != null && questions[4] != null) {
-            // Can you please check if assigned dates and due dates are valid?
-
-            System.out.println("Title: " + titleField.getText());
-            System.out.println("Assigned Date: " + assignedDate.getValue().toString());
-            System.out.println("Due Date: " + dueDate.getValue().toString());
-            String type = summativeRadio.isSelected() ? "Summative" : "Formative";
-            System.out.println("Type: " + type);
+        if (titleField.getText().length() > 0 && assignedDate.getValue() != null && dueDate.getValue() != null && assignedHourCombo.getSelectionModel().getSelectedItem() != null
+                && assignedMinuteCombo.getSelectionModel().getSelectedItem() != null && dueHourCombo.getSelectionModel().getSelectedItem() != null
+                && dueMinuteCombo.getSelectionModel().getSelectedItem() != null &&(summativeRadio.isSelected() || formativeRadio.isSelected()) && questions[0] != null
+                && questions[1] != null && questions[2] != null && questions[3] != null && questions[4] != null) {
 
             // Questions are stored in the questions array
+            String type = summativeRadio.isSelected() ? "1" : "0";
             String query = "";
             int newIndex = SqlHandler.GetNewIndex();
+            String Indexes = "";
+
+            for (int i = newIndex+1; i < newIndex+6; i++) {
+                Indexes += String.valueOf(i) + ";";
+            }
+
             newIndex++;
             for (Question question : questions) {
                 if (question.getType().equals("m")) {
@@ -301,8 +304,6 @@ public class LecturerCreatesAssessmentController {
 
                     // INCREASING THE COUNTER
                     newIndex++;
-                    AlertHandler.showShortMessage("Multiple question", String.format("Question title: %s. Answer 1: %s, Answer 2: %s, Answer 3: %s, Correct %s",
-                            mQuestion.getTitle(), mQuestion.getAnswer1(), mQuestion.getAnswer2(), mQuestion.getAnswer3(), mQuestion.getCorrectAnswer()));
                 } else {
                     TextQuestion tQuestion = (TextQuestion) question;
                     // DB VALUES
@@ -315,13 +316,24 @@ public class LecturerCreatesAssessmentController {
                     query += String.format("INSERT INTO dqs_qanda (qora, content) VALUES ('%s', '%s');", newQuestionType, "t");
 
                     newIndex++;
-                    AlertHandler.showShortMessage("Regular question", String.format("Question title: %s. Correct %s",
-                            tQuestion.getTitle(), tQuestion.getCorrectAnswer()));
                 }
             }
 
-            // IF EVERYTHING IS SAVED, LOAD lecturer selected Module SCREEN AGAIN:
-            loadLecturerSelectedModule();
+            if (SqlHandler.CreateAssessment(selectedModule.getModuleID(), titleField.getText(), assessment.getAssignedDateProperty().get(),
+                    assessment.getDueDateProperty().get(), type, Indexes.replaceFirst(".$",""))) {
+                String[] parts = query.split(";");
+                for (String part: parts) {
+                    SqlHandler.FillAssessmentQuestions(part);
+                }
+                List<Integer> Students = SqlHandler.GetAllStudentsByModule(selectedModule.getModuleID());
+                for (int id : Students) {
+                    SqlHandler.AddUsersToAssessment(id, SqlHandler.GetNewAssessmentId());
+                }
+                AlertHandler.showShortMessage("Test has been created", String.format("%s has been successfully saved to the database!", titleField.getText()));
+                loadLecturerSelectedModule();
+            } else {
+                AlertHandler.showShortMessage("Error", "An error occured while saving data!");
+            }
         }else{
             AlertHandler.showShortMessage("Error", "Please fill out every information to create an assessment");
         }

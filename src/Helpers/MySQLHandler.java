@@ -651,20 +651,36 @@ public class MySQLHandler {
         return students;
     }
 
-    public Boolean CreateAssessment(int Id, int ModuleId, String title, String AssignedDate, String DueDate, String Type, String Questions) {
+    public int GetNewAssessmentId() {
+        int id = 0;
+        try {
+            Statement stmt = Con.createStatement();
+            String query = "SELECT COUNT(*) AS RCOUNT FROM dqs_assessments";
+            //System.out.println(query);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                id = rs.getInt("RCOUNT");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return id;
+    }
+
+    public Boolean CreateAssessment(int ModuleId, String title, String AssignedDate, String DueDate, String Type, String Questions) {
         Boolean ret = false;
         try {
             String query ="INSERT INTO dqs_assessments (assessment_id, moduleID, title, assignedDate, dueDate, type, indexes)"
-                    + " VALUES (?, ?, ?, ?, ?, ?, ?)";
+                    + " VALUES ((select * from (SELECT MAX(assessment_id) from dqs_assessments) t) + 1, ?, ?, ?, ?, ?, ?)";
 
             PreparedStatement preparedStmt = Con.prepareStatement(query);
-            preparedStmt.setInt (1, Id);
-            preparedStmt.setInt (2, ModuleId);
-            preparedStmt.setString (3, title);
-            preparedStmt.setString   (4, AssignedDate);
-            preparedStmt.setString   (5, DueDate);
-            preparedStmt.setString   (6, Type);
-            preparedStmt.setString   (7, Questions);
+            preparedStmt.setInt (1, ModuleId);
+            preparedStmt.setString (2, title);
+            preparedStmt.setString   (3, AssignedDate);
+            preparedStmt.setString   (4, DueDate);
+            preparedStmt.setString   (5, Type);
+            preparedStmt.setString   (6, Questions);
 
             preparedStmt.execute();
             ret = true;
@@ -689,5 +705,36 @@ public class MySQLHandler {
             System.out.println(e.getMessage());
         }
         return count;
+    }
+
+    public Boolean FillAssessmentQuestions(String query) {
+        Boolean ret = false;
+        try {
+            Statement stmt = Con.createStatement();
+            stmt.execute(query);
+            ret = true;
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return ret;
+    }
+
+    public Boolean AddUsersToAssessment(int StudentId, int AssessmentId) {
+        Boolean ret = false;
+        try {
+            String query ="INSERT INTO dqs_studentsassessments (studentID, assessmentID, completed, result) VALUES (?, ?, '0', '-1')";
+
+            PreparedStatement preparedStmt = Con.prepareStatement(query);
+            preparedStmt.setInt (1, StudentId);
+            preparedStmt.setInt (2, AssessmentId);
+
+            preparedStmt.execute();
+            ret = true;
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return ret;
     }
 }
