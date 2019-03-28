@@ -7,14 +7,14 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Lecturer.LecturerSelectedModuleController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Lecturer.LecturerSelectedModuleController">
    <children>
-      <Label fx:id="moduleLabel" layoutX="155.0" layoutY="21.0" prefHeight="57.0" prefWidth="268.0" text="Module" textAlignment="CENTER">
+      <Label fx:id="moduleLabel" layoutX="155.0" layoutY="9.0" prefHeight="57.0" prefWidth="268.0" text="Module" textAlignment="CENTER">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Button layoutX="14.0" layoutY="22.0" mnemonicParsing="false" onAction="#onBack" prefHeight="31.0" prefWidth="71.0" text="Back" />
+      <Button layoutX="22.0" layoutY="19.0" mnemonicParsing="false" onAction="#onBack" prefHeight="31.0" prefWidth="71.0" text="Back" />
       <TableView fx:id="studentsTable" layoutX="22.0" layoutY="156.0" prefHeight="200.0" prefWidth="394.0">
         <columns>
           <TableColumn fx:id="nameColumn" prefWidth="229.0" text="Student Name" />
@@ -28,7 +28,7 @@
             <Font name="System Bold" size="17.0" />
          </font>
       </Label>
-      <Button layoutX="439.0" layoutY="22.0" mnemonicParsing="false" onAction="#onCreate" text="Create Assessment" />
+      <Button layoutX="439.0" layoutY="22.0" mnemonicParsing="false" onAction="#onCreate" prefHeight="31.0" prefWidth="144.0" text="Create Assessment" />
       <Button layoutX="441.0" layoutY="69.0" mnemonicParsing="false" onAction="#onView" prefHeight="31.0" prefWidth="144.0" text="View Assessments" />
    </children>
 </Pane>

@@ -13,11 +13,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
+import java.util.List;
 import java.util.Map;
 
 public class LecturerHomeController {
@@ -168,7 +170,14 @@ public class LecturerHomeController {
         if(selectedModule == null){
             AlertHandler.showErrorAlert("Error", "Select a module first!", "Select a module from the list first and then click on delete module");
         }else{
-            // Delete selected module
+            if (SqlHandler.DeleteModule(selectedModule.getModuleID())) {
+                List<Integer> totalStudents = SqlHandler.GetAllStudentsByModule(selectedModule.getModuleID());
+                SqlHandler.DeleteModuleStudents(selectedModule.getModuleID());
+                AlertHandler.showErrorAlert("Module deleted successfully",
+                        String.format("%s has been successfully deleted!",
+                                selectedModule.getModuleName()), String.format("%s students have been removed from the module.", String.valueOf(totalStudents.size())));
+                loadModules();
+            }
         }
     }
 }

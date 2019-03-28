@@ -599,4 +599,95 @@ public class MySQLHandler {
         }
         return id;
     }
+
+    public Boolean DeleteModule(int ModuleId) {
+        Boolean ret = false;
+        try {
+            String query = String.format("DELETE FROM dqs_modulesdata WHERE module_id = ?");
+
+            PreparedStatement preparedStmt = Con.prepareStatement(query);
+            preparedStmt.setInt (1, ModuleId);
+
+            preparedStmt.execute();
+            ret = true;
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return ret;
+    }
+    public Boolean DeleteModuleStudents(int ModuleId) {
+        Boolean ret = false;
+        try {
+            String query = String.format("DELETE FROM dqs_modules WHERE student_module_id = ?");
+
+            PreparedStatement preparedStmt = Con.prepareStatement(query);
+            preparedStmt.setInt (1, ModuleId);
+
+            preparedStmt.execute();
+            ret = true;
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return ret;
+    }
+
+    public List<Integer> GetAllStudentsByModule(int ModuleId) {
+        String result = "";
+        List<Integer> students = new ArrayList<Integer>();
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT student_id from dqs_modules WHERE student_module_id = %d", ModuleId);
+            //System.out.println(query);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                students.add(rs.getInt("student_id"));
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return students;
+    }
+
+    public Boolean CreateAssessment(int Id, int ModuleId, String title, String AssignedDate, String DueDate, String Type, String Questions) {
+        Boolean ret = false;
+        try {
+            String query ="INSERT INTO dqs_assessments (assessment_id, moduleID, title, assignedDate, dueDate, type, indexes)"
+                    + " VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+            PreparedStatement preparedStmt = Con.prepareStatement(query);
+            preparedStmt.setInt (1, Id);
+            preparedStmt.setInt (2, ModuleId);
+            preparedStmt.setString (3, title);
+            preparedStmt.setString   (4, AssignedDate);
+            preparedStmt.setString   (5, DueDate);
+            preparedStmt.setString   (6, Type);
+            preparedStmt.setString   (7, Questions);
+
+            preparedStmt.execute();
+            ret = true;
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return ret;
+    }
+    // Getting index of questions start
+    public int GetNewIndex() {
+        int count = 0;
+        try {
+            Statement stmt = Con.createStatement();
+            String query = "SELECT COUNT(qora) AS REGULAR_COUNT FROM dqs_qanda WHERE content='n' OR content='m'";
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                count = rs.getInt("REGULAR_COUNT");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return count;
+    }
 }

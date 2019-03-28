@@ -2,10 +2,7 @@ package Lecturer;
 
 import Helpers.AlertHandler;
 import Helpers.MySQLHandler;
-import Model.Assessment;
-import Model.Lecturer;
-import Model.LecturerModule;
-import Model.Question;
+import Model.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -198,6 +195,48 @@ public class LecturerCreatesAssessmentController {
             System.out.println("Type: " + type);
 
             // Questions are stored in the questions array
+            String query = "";
+            int newIndex = SqlHandler.GetNewIndex();
+            newIndex++;
+            for (Question question : questions) {
+                if (question.getType().equals("m")) {
+                    MultipleQuestion mQuestion = (MultipleQuestion) question;
+                    // DB VALUES
+                    String newQuestion = "question" + String.valueOf(newIndex);
+                    String newQuestionIndex1 = "question" + String.valueOf(newIndex) + "_q1";
+                    String newQuestionIndex2 = "question" + String.valueOf(newIndex) + "_q2";
+                    String newQuestionIndex3 = "question" + String.valueOf(newIndex) + "_q3";
+                    String newQuestionCorrect = "question" + String.valueOf(newIndex) + "_c";
+                    String newQuestionType = "question" + String.valueOf(newIndex) + "_t";
+
+                    // APPENDING TO QUERY
+                    query += String.format("INSERT INTO dqs_qanda (qora, content) VALUES ('%s', '%s');", newQuestion, mQuestion.getTitle());
+                    query += String.format("INSERT INTO dqs_qanda (qora, content) VALUES ('%s', '%s');", newQuestionIndex1, mQuestion.getAnswer1());
+                    query += String.format("INSERT INTO dqs_qanda (qora, content) VALUES ('%s', '%s');", newQuestionIndex2, mQuestion.getAnswer2());
+                    query += String.format("INSERT INTO dqs_qanda (qora, content) VALUES ('%s', '%s');", newQuestionIndex3, mQuestion.getAnswer3());
+                    query += String.format("INSERT INTO dqs_qanda (qora, content) VALUES ('%s', '%s');", newQuestionCorrect, mQuestion.getCorrectAnswer());
+                    query += String.format("INSERT INTO dqs_qanda (qora, content) VALUES ('%s', '%s');", newQuestionType, "m");
+
+                    // INCREASING THE COUNTER
+                    newIndex++;
+                    AlertHandler.showShortMessage("Multiple question", String.format("Question title: %s. Answer 1: %s, Answer 2: %s, Answer 3: %s, Correct %s",
+                            mQuestion.getTitle(), mQuestion.getAnswer1(), mQuestion.getAnswer2(), mQuestion.getAnswer3(), mQuestion.getCorrectAnswer()));
+                } else {
+                    TextQuestion tQuestion = (TextQuestion) question;
+                    // DB VALUES
+                    String newQuestion = "question" + String.valueOf(newIndex);
+                    String newQuestionCorrect = "question" + String.valueOf(newIndex) + "_c";
+                    String newQuestionType = "question" + String.valueOf(newIndex) + "_t";
+
+                    query += String.format("INSERT INTO dqs_qanda (qora, content) VALUES ('%s', '%s');", newQuestion, tQuestion.getTitle());
+                    query += String.format("INSERT INTO dqs_qanda (qora, content) VALUES ('%s', '%s');", newQuestionCorrect, tQuestion.getCorrectAnswer());
+                    query += String.format("INSERT INTO dqs_qanda (qora, content) VALUES ('%s', '%s');", newQuestionType, "t");
+
+                    newIndex++;
+                    AlertHandler.showShortMessage("Regular question", String.format("Question title: %s. Correct %s",
+                            tQuestion.getTitle(), tQuestion.getCorrectAnswer()));
+                }
+            }
 
             // IF EVERYTHING IS SAVED, LOAD lecturer selected Module SCREEN AGAIN:
             //loadLecturerSelectedModule();
@@ -251,7 +290,7 @@ public class LecturerCreatesAssessmentController {
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
             stage.setTitle("Multiple Choice Question");
-            stage.setScene(new Scene(parent, 600, 400));
+            stage.setScene(new Scene(parent, 498, 313));
             stage.setResizable(false);
             stage.show();
 
@@ -272,7 +311,7 @@ public class LecturerCreatesAssessmentController {
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
             stage.setTitle("Regular Question");
-            stage.setScene(new Scene(parent, 600, 243));
+            stage.setScene(new Scene(parent, 581, 136));
             stage.setResizable(false);
             stage.show();
 
