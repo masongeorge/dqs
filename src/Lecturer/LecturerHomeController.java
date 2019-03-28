@@ -163,4 +163,12 @@ public class LecturerHomeController {
         Stage oldStage = (Stage)welcomeLabel.getScene().getWindow();
         oldStage.close();
     }
+
+    public void onDelete(){
+        if(selectedModule == null){
+            AlertHandler.showErrorAlert("Error", "Select a module first!", "Select a module from the list first and then click on delete module");
+        }else{
+            // Delete selected module
+        }
+    }
 }

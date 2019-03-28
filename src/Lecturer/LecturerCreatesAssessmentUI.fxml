@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="335.0" prefWidth="724.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Lecturer.LecturerCreatesAssessmentController">
+   <children>
+      <Label layoutX="315.0" layoutY="22.0" text="Create your assessment">
+         <font>
+            <Font size="15.0" />
+         </font>
+      </Label>
+      <Button layoutX="22.0" layoutY="18.0" mnemonicParsing="false" onAction="#onBack" text="Back" />
+      <Label layoutX="22.0" layoutY="96.0" text="Assessment title:" />
+      <TextField fx:id="titleField" layoutX="142.0" layoutY="91.0" />
+      <Label layoutX="22.0" layoutY="152.0" text="Assigned date:" />
+      <Label layoutX="22.0" layoutY="212.0" text="Due date:" />
+      <DatePicker fx:id="assignedDate" layoutX="142.0" layoutY="147.0" />
+      <DatePicker fx:id="dueDate" layoutX="142.0" layoutY="207.0" />
+      <RadioButton fx:id="summativeRadio" layoutX="23.0" layoutY="292.0" mnemonicParsing="false" onAction="#onSummative" text="Summative (1 attempt only)" />
+      <RadioButton fx:id="formativeRadio" layoutX="225.0" layoutY="292.0" mnemonicParsing="false" onAction="#onFormative" text="Formative (Multiple attempts)" />
+      <Label layoutX="22.0" layoutY="262.0" text="Type:" />
+      <Button fx:id="addQ1Button" layoutX="418.0" layoutY="117.0" mnemonicParsing="false" onAction="#onAddQ1" text="Add Question #1" />
+      <Button fx:id="addQ2Button" layoutX="578.0" layoutY="117.0" mnemonicParsing="false" onAction="#onAddQ2" text="Add Question #2" />
+      <Button fx:id="addQ3Button" layoutX="417.0" layoutY="195.0" mnemonicParsing="false" onAction="#onAddQ3" text="Add Question #3" />
+      <Button fx:id="addQ4Button" layoutX="578.0" layoutY="195.0" mnemonicParsing="false" onAction="#onAddQ4" text="Add Question #4" />
+      <Button fx:id="addQ5Button" layoutX="496.0" layoutY="270.0" mnemonicParsing="false" onAction="#onAddQ5" text="Add Question #5" />
+      <Button layoutX="607.0" layoutY="18.0" mnemonicParsing="false" onAction="#onSave" prefHeight="27.0" prefWidth="92.0" text="Save" />
+   </children>
+</Pane>

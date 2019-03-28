@@ -2,9 +2,7 @@ package Lecturer;
 
 import Helpers.AlertHandler;
 import Helpers.MySQLHandler;
-import Model.Lecturer;
-import Model.LecturerModule;
-import Model.StudentStatus;
+import Model.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -97,7 +95,26 @@ public class LecturerSelectedModuleController {
     }
 
     public void onCreate(){
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/Lecturer/LecturerCreatesAssessmentUI.fxml"));
+            loader.load();
+            LecturerCreatesAssessmentController controller = loader.getController();
+            Question questions[] = new Question[5];
+            Assessment assessment = new Assessment();
+            controller.initData(lecturer, selectedModule, questions, assessment);
 
+            Parent parent = loader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle("Create Assessment");
+            stage.setScene(new Scene(parent, 724, 335));
+            stage.setResizable(false);
+            stage.show();
+
+            closeScreen();
+        }catch (Exception e){
+            System.out.println("Error: " + e);
+        }
     }
 
     public void onView(){

@@ -11,6 +11,10 @@ public class Assessment {
     private boolean completed;
     private double result;
 
+    public Assessment(){
+
+    }
+
     public Assessment(String name, String assignedDate, String dueDate, int atype, boolean completed, double result) {
         this.name = new SimpleStringProperty(name);;
         this.assignedDate = new SimpleStringProperty(assignedDate);;
@@ -40,6 +44,10 @@ public class Assessment {
 
     }
 
+    public String getName(){
+        return name.get();
+    }
+
     public void setCompleted(boolean completed) {
         this.completed = completed;
     }
@@ -66,7 +74,11 @@ public class Assessment {
     }
 
     public void setName(String name) {
-        this.name.set(name);
+        if(this.name == null){
+            this.name = new SimpleStringProperty(name);
+        }else{
+            this.name.set(name);
+        }
     }
 
     public StringProperty getAssignedDateProperty() {
@@ -74,7 +86,11 @@ public class Assessment {
     }
 
     public void setAssignedDate(String assignedDate) {
-        this.assignedDate.set(assignedDate);
+        if(this.assignedDate == null){
+            this.assignedDate = new SimpleStringProperty(assignedDate);
+        }else{
+            this.assignedDate.set(assignedDate);
+        }
     }
 
     public StringProperty getDueDateProperty() {
@@ -82,7 +98,11 @@ public class Assessment {
     }
 
     public void setDueDate(String dueDate) {
-        this.dueDate.set(dueDate);
+        if(this.dueDate == null){
+            this.dueDate = new SimpleStringProperty(dueDate);
+        }else{
+            this.dueDate.set(dueDate);
+        }
     }
 
     public int getType() {

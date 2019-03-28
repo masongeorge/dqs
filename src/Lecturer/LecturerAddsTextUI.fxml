@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="243.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Lecturer.LecturerAddsTextController">
+   <children>
+      <Label fx:id="counterLabel" layoutX="230.0" layoutY="24.0" text="Question 1">
+         <font>
+            <Font size="22.0" />
+         </font>
+      </Label>
+      <Button layoutX="14.0" layoutY="25.0" mnemonicParsing="false" onAction="#onCancel" text="Cancel" />
+      <Button layoutX="497.0" layoutY="25.0" mnemonicParsing="false" onAction="#onSave" prefHeight="27.0" prefWidth="82.0" text="Save" />
+      <Label layoutX="171.0" layoutY="108.0" text="Question title:" />
+      <TextField fx:id="titleField" layoutX="277.0" layoutY="103.0" />
+      <TextField fx:id="correctField" layoutX="277.0" layoutY="167.0" />
+      <Label layoutX="171.0" layoutY="172.0" text="Answer:" />
+   </children>
+</Pane>
