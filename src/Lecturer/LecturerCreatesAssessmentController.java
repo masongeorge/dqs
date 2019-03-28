@@ -3,6 +3,8 @@ package Lecturer;
 import Helpers.AlertHandler;
 import Helpers.MySQLHandler;
 import Model.*;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -11,7 +13,9 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 import java.util.Optional;
 
 public class LecturerCreatesAssessmentController {
@@ -46,13 +50,25 @@ public class LecturerCreatesAssessmentController {
     @FXML
     private Button addQ5Button;
 
+    @FXML
+    private ComboBox<Integer> assignedHourCombo;
+
+    @FXML
+    private ComboBox<Integer> assignedMinuteCombo;
+
+    @FXML
+    private ComboBox<Integer> dueHourCombo;
+
+    @FXML
+    private ComboBox<Integer> dueMinuteCombo;
+
     private LecturerModule selectedModule;
 
     private Lecturer lecturer;
 
     private MySQLHandler SqlHandler;
 
-    private Question questions[];
+    private Question[] questions;
 
     private Assessment assessment;
 
@@ -63,6 +79,38 @@ public class LecturerCreatesAssessmentController {
         }catch (Exception e){
             System.out.println(e);
         }
+
+        setupCombos();
+    }
+
+    public void setupCombos(){
+        ObservableList<Integer> hours = FXCollections.observableArrayList();
+        ObservableList<Integer> minutes = FXCollections.observableArrayList();
+
+        for (int i = 0; i <= 23; i++) {
+            hours.add(i);
+        }
+        for (int i = 0; i <= 59 ; i++) {
+            minutes.add(i);
+        }
+
+        Calendar rightNow = Calendar.getInstance();
+        int currentHour = rightNow.get(Calendar.HOUR_OF_DAY);
+        int currentMinute = rightNow.get(Calendar.MINUTE);
+
+        assignedHourCombo.setItems(hours);
+        assignedHourCombo.getSelectionModel().select(currentHour);
+
+        assignedMinuteCombo.setItems(minutes);
+        assignedMinuteCombo.getSelectionModel().select(currentMinute);
+
+        dueHourCombo.setItems(hours);
+        dueHourCombo.getSelectionModel().select(currentHour);
+
+        dueMinuteCombo.setItems(minutes);
+        dueMinuteCombo.getSelectionModel().select(currentMinute);
+
+        assignedDate.setValue(LocalDate.now());
     }
 
     public void initData(Lecturer lecturer, LecturerModule selectedModule, Question questions[], Assessment assessment){
@@ -73,7 +121,6 @@ public class LecturerCreatesAssessmentController {
         setupQuestionButtons();
 
         loadAssessmentData();
-
     }
 
     public void loadAssessmentData(){
@@ -83,16 +130,28 @@ public class LecturerCreatesAssessmentController {
 
         if(assessment.getAssignedDateProperty() != null){
             String dateString = assessment.getAssignedDateProperty().get();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDate localDate = LocalDate.parse(dateString, formatter);
             assignedDate.setValue(localDate);
+
+            LocalTime localTime = LocalTime.parse(dateString, formatter);
+            int hour = localTime.getHour();
+            int minute = localTime.getMinute();
+            assignedHourCombo.getSelectionModel().select(hour);
+            assignedMinuteCombo.getSelectionModel().select(minute);
         }
 
         if(assessment.getDueDateProperty() != null){
             String dateString = assessment.getDueDateProperty().get();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDate localDate = LocalDate.parse(dateString, formatter);
             dueDate.setValue(localDate);
+
+            LocalTime localTime = LocalTime.parse(dateString, formatter);
+            int hour = localTime.getHour();
+            int minute = localTime.getMinute();
+            dueHourCombo.getSelectionModel().select(hour);
+            dueMinuteCombo.getSelectionModel().select(minute);
         }
 
         if(assessment.getType() == 0){
@@ -100,6 +159,8 @@ public class LecturerCreatesAssessmentController {
         }else{
             onSummative();
         }
+
+
     }
 
     public void saveAssessmentInfo(){
@@ -108,11 +169,31 @@ public class LecturerCreatesAssessmentController {
         }
 
         if(assignedDate.getValue() != null){
-            assessment.setAssignedDate(assignedDate.getValue().toString());
+            String dateStr = assignedDate.getValue().toString();
+            String hourStr = String.valueOf(assignedHourCombo.getSelectionModel().getSelectedItem());
+            String minuteStr = String.valueOf(assignedMinuteCombo.getSelectionModel().getSelectedIndex());
+            if(hourStr.length() == 1){
+                hourStr = "0" + hourStr;
+            }
+            if(minuteStr.length() == 1){
+                minuteStr = "0" + minuteStr;
+            }
+            String fullDateStr = dateStr + " " + hourStr + ":" + minuteStr + ":00";
+            assessment.setAssignedDate(fullDateStr);
         }
 
         if(dueDate.getValue() != null){
-            assessment.setDueDate(dueDate.getValue().toString());
+            String dateStr = dueDate.getValue().toString();
+            String hourStr = String.valueOf(dueHourCombo.getSelectionModel().getSelectedItem());
+            String minuteStr = String.valueOf(dueMinuteCombo.getSelectionModel().getSelectedIndex());
+            if(hourStr.length() == 1){
+                hourStr = "0" + hourStr;
+            }
+            if(minuteStr.length() == 1){
+                minuteStr = "0" + minuteStr;
+            }
+            String fullDateStr = dateStr + " " + hourStr + ":" + minuteStr + ":00";
+            assessment.setDueDate(fullDateStr);
         }
 
         if(summativeRadio.isSelected()){
@@ -184,8 +265,9 @@ public class LecturerCreatesAssessmentController {
 
     public void onSave(){
         saveAssessmentInfo();
+        System.out.println(assignedHourCombo.getSelectionModel().getSelectedItem());
 
-        if (titleField.getText().length() > 0 && assignedDate.getValue() != null && dueDate.getValue() != null && (summativeRadio.isSelected() || formativeRadio.isSelected()) && questions[0] != null && questions[1] != null && questions[2] != null && questions[3] != null && questions[4] != null) {
+        if (titleField.getText().length() > 0 && assignedDate.getValue() != null && dueDate.getValue() != null && assignedHourCombo.getSelectionModel().getSelectedItem() != null && assignedMinuteCombo.getSelectionModel().getSelectedItem() != null && dueHourCombo.getSelectionModel().getSelectedItem() != null && dueMinuteCombo.getSelectionModel().getSelectedItem() != null &&(summativeRadio.isSelected() || formativeRadio.isSelected()) && questions[0] != null && questions[1] != null && questions[2] != null && questions[3] != null && questions[4] != null) {
             // Can you please check if assigned dates and due dates are valid?
 
             System.out.println("Title: " + titleField.getText());
@@ -239,7 +321,7 @@ public class LecturerCreatesAssessmentController {
             }
 
             // IF EVERYTHING IS SAVED, LOAD lecturer selected Module SCREEN AGAIN:
-            //loadLecturerSelectedModule();
+            loadLecturerSelectedModule();
         }else{
             AlertHandler.showShortMessage("Error", "Please fill out every information to create an assessment");
         }
