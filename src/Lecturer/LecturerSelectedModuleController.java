@@ -102,7 +102,7 @@ public class LecturerSelectedModuleController {
             LecturerCreatesAssessmentController controller = loader.getController();
             Question questions[] = new Question[5];
             Assessment assessment = new Assessment();
-            controller.initData(lecturer, selectedModule, questions, assessment);
+            controller.initData(lecturer, selectedModule, questions, assessment, true);
 
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
@@ -118,7 +118,24 @@ public class LecturerSelectedModuleController {
     }
 
     public void onView(){
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/Lecturer/LecturerAssessmentsUI.fxml"));
+            loader.load();
+            LecturerAssessmentsController controller = loader.getController();
+            controller.initData(lecturer, selectedModule);
 
+            Parent parent = loader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle("Create Assessment");
+            stage.setScene(new Scene(parent, 600, 400));
+            stage.setResizable(false);
+            stage.show();
+
+            closeScreen();
+        }catch (Exception e){
+            System.out.println("Error: " + e);
+        }
     }
 
     public void onAdd(){

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Lecturer.LecturerAssessmentsController">
+   <children>
+      <Button layoutX="14.0" layoutY="25.0" mnemonicParsing="false" onAction="#onBack" text="Back" />
+      <Label layoutX="257.0" layoutY="28.0" text="Assessments">
+         <font>
+            <Font size="17.0" />
+         </font>
+      </Label>
+      <TableView fx:id="assessmentsTable" layoutX="38.0" layoutY="84.0" prefHeight="238.0" prefWidth="543.0">
+        <columns>
+          <TableColumn fx:id="titleColumn" prefWidth="372.0" text="Title" />
+            <TableColumn fx:id="typeColumn" prefWidth="166.0" text="Type" />
+        </columns>
+      </TableView>
+      <Button layoutX="213.0" layoutY="347.0" mnemonicParsing="false" onAction="#onSelect" text="Open Selected Assessement" />
+   </children>
+</Pane>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="245.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Lecturer.LecturerSelectedAssessmentController">
+   <children>
+      <Label fx:id="titleLabel" layoutX="254.0" layoutY="22.0" text="Assessment">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Button layoutX="21.0" layoutY="18.0" mnemonicParsing="false" onAction="#onBack" prefHeight="27.0" prefWidth="62.0" text="Back" />
+      <Label layoutX="180.0" layoutY="96.0" text="Assigned date:" />
+      <Label layoutX="180.0" layoutY="137.0" text="Due date:" />
+      <Button layoutX="188.0" layoutY="187.0" mnemonicParsing="false" onAction="#onView" prefHeight="27.0" prefWidth="227.0" text="View Statistics" />
+      <Button layoutX="466.0" layoutY="18.0" mnemonicParsing="false" onAction="#onEdit" text="Edit Assessment" />
+      <Label fx:id="assignedLabel" layoutX="293.0" layoutY="96.0" prefHeight="17.0" prefWidth="245.0" text="Date" />
+      <Label fx:id="dueLabel" layoutX="293.0" layoutY="137.0" prefHeight="17.0" prefWidth="245.0" text="Date" />
+   </children>
+</Pane>

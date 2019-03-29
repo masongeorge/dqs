@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Lecturer.LecturerViewsStatsFormativeController">
+   <children>
+      <Label fx:id="titleLabel" layoutX="198.0" layoutY="26.0" text="Statistics for Assessment">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Label>
+      <Button layoutX="14.0" layoutY="24.0" mnemonicParsing="false" onAction="#onBack" prefHeight="27.0" prefWidth="70.0" text="Back" />
+      <Label layoutX="165.0" layoutY="107.0" text="Average Result:">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font></Label>
+      <Label layoutX="166.0" layoutY="159.0" text="Lowest Result: ">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font></Label>
+      <Label layoutX="166.0" layoutY="208.0" text="Highest Result:">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font></Label>
+      <Label layoutX="146.0" layoutY="259.0" text="Number of perfect Results:">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="averageLabel" layoutX="363.0" layoutY="108.0" text="22%" textFill="#bf1c1c">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="lowestLabel" layoutX="363.0" layoutY="160.0" text="22%" textFill="#bf1c1c">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="highestLabel" layoutX="363.0" layoutY="200.0" text="22%" textFill="#bf1c1c">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="perfectLabel" layoutX="363.0" layoutY="260.0" text="22%" textFill="#bf1c1c">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+   </children>
+</Pane>

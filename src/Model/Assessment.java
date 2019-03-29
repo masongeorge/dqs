@@ -15,10 +15,17 @@ public class Assessment {
 
     }
 
+    public Assessment(String name, String assignedDate, String dueDate, int atype){
+        this.name = new SimpleStringProperty(name);
+        this.assignedDate = new SimpleStringProperty(assignedDate);
+        this.dueDate = new SimpleStringProperty(dueDate);
+        this.atype = atype;
+    }
+
     public Assessment(String name, String assignedDate, String dueDate, int atype, boolean completed, double result) {
-        this.name = new SimpleStringProperty(name);;
-        this.assignedDate = new SimpleStringProperty(assignedDate);;
-        this.dueDate = new SimpleStringProperty(dueDate);;
+        this.name = new SimpleStringProperty(name);
+        this.assignedDate = new SimpleStringProperty(assignedDate);
+        this.dueDate = new SimpleStringProperty(dueDate);
         this.atype = atype;
         this.result = result;
     }
@@ -41,7 +48,6 @@ public class Assessment {
         }else{
             return new SimpleStringProperty( "No");
         }
-
     }
 
     public String getName(){

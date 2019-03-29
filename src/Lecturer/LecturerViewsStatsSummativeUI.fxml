@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="331.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Lecturer.LecturerViewsStatsSummative">
+   <children>
+      <Label fx:id="titleLabel" layoutX="198.0" layoutY="26.0" text="Statistics for Assessment">
+         <font>
+            <Font size="19.0" />
+         </font>
+      </Label>
+      <Button layoutX="14.0" layoutY="24.0" mnemonicParsing="false" onAction="#onBack" prefHeight="27.0" prefWidth="70.0" text="Back" />
+      <Label layoutX="33.0" layoutY="105.0" text="Average Result:">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font></Label>
+      <Label layoutX="34.0" layoutY="157.0" text="Lowest Result: ">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font></Label>
+      <Label layoutX="34.0" layoutY="206.0" text="Highest Result:">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font></Label>
+      <Label layoutX="28.0" layoutY="246.0" prefHeight="44.0" prefWidth="113.0" text="Number of perfect Results:" textAlignment="CENTER" wrapText="true">
+         <font>
+            <Font name="System Bold" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="averageLabel" layoutX="165.0" layoutY="105.0" text="22%" textFill="#bf1c1c">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="lowestLabel" layoutX="165.0" layoutY="157.0" text="22%" textFill="#bf1c1c">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="highestLabel" layoutX="165.0" layoutY="197.0" text="22%" textFill="#bf1c1c">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label fx:id="perfectLabel" layoutX="165.0" layoutY="257.0" text="22%" textFill="#bf1c1c">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <TableView fx:id="studentsTable" layoutX="254.0" layoutY="92.0" prefHeight="210.0" prefWidth="332.0">
+        <columns>
+          <TableColumn fx:id="nameColumn" prefWidth="168.0" text="Student Name" />
+          <TableColumn fx:id="resultColumn" prefWidth="162.0" text="Result" />
+        </columns>
+      </TableView>
+   </children>
+</Pane>

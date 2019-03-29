@@ -73,6 +73,11 @@ public class LecturerCreatesAssessmentController {
 
     private Assessment assessment;
 
+    private boolean isCreateMode;
+
+    @FXML
+    private Label createLabel;
+
     @FXML
     public void initialize(){
         try{
@@ -114,11 +119,17 @@ public class LecturerCreatesAssessmentController {
         assignedDate.setValue(LocalDate.now());
     }
 
-    public void initData(Lecturer lecturer, LecturerModule selectedModule, Question questions[], Assessment assessment){
+    public void initData(Lecturer lecturer, LecturerModule selectedModule, Question questions[], Assessment assessment, boolean isCreateMode){
         this.lecturer = lecturer;
         this.selectedModule = selectedModule;
         this.questions = questions;
         this.assessment = assessment;
+        this.isCreateMode = isCreateMode;
+
+        if(!isCreateMode){
+            createLabel.setText("Edit your assessment");
+        }
+
         setupQuestionButtons();
 
         loadAssessmentData();
@@ -240,7 +251,32 @@ public class LecturerCreatesAssessmentController {
     }
 
     public void onBack(){
-        loadLecturerSelectedModule();
+        if(isCreateMode){
+            loadLecturerSelectedModule();
+        }else{
+            loadLecturerSelectedAssessment();
+        }
+    }
+
+    public void loadLecturerSelectedAssessment(){
+        try{
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/Lecturer/LecturerSelectedAssessmentUI.fxml"));
+            loader.load();
+            LecturerSelectedAssessmentController controller = loader.getController();
+            controller.initData(lecturer, selectedModule, assessment);
+
+            Parent parent = loader.getRoot();
+            Stage stage = new Stage();
+            stage.setTitle("Your Assessment");
+            stage.setScene(new Scene(parent, 600, 245));
+            stage.setResizable(false);
+            stage.show();
+
+            closeScreen();
+        }catch (Exception e){
+            System.out.println("Error: " + e);
+        }
     }
 
     public void loadLecturerSelectedModule(){
@@ -264,9 +300,7 @@ public class LecturerCreatesAssessmentController {
         }
     }
 
-    public void onSave(){
-        saveAssessmentInfo();
-
+    public void saveNewAssessment(){
         if (titleField.getText().length() > 0 && assignedDate.getValue() != null && dueDate.getValue() != null && assignedHourCombo.getSelectionModel().getSelectedItem() != null
                 && assignedMinuteCombo.getSelectionModel().getSelectedItem() != null && dueHourCombo.getSelectionModel().getSelectedItem() != null
                 && dueMinuteCombo.getSelectionModel().getSelectedItem() != null &&(summativeRadio.isSelected() || formativeRadio.isSelected()) && questions[0] != null
@@ -339,6 +373,24 @@ public class LecturerCreatesAssessmentController {
         }
     }
 
+    public void saveEditedAssessment(){
+        // Update the assessment in Database
+        loadLecturerSelectedAssessment();
+    }
+
+
+
+    public void onSave(){
+        saveAssessmentInfo();
+        if(isCreateMode){
+            saveNewAssessment();
+        }else{
+            saveEditedAssessment();
+        }
+
+
+    }
+
     public void onSummative(){
         summativeRadio.setSelected(true);
         formativeRadio.setSelected(false);
@@ -379,7 +431,7 @@ public class LecturerCreatesAssessmentController {
             loader.setLocation(getClass().getResource("/Lecturer/LecturerAddsMultipleUI.fxml"));
             loader.load();
             LecturerAddsMultipleController controller = loader.getController();
-            controller.initData(lecturer, selectedModule, questions, questionIndex, assessment);
+            controller.initData(lecturer, selectedModule, questions, questionIndex, assessment, isCreateMode);
 
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
@@ -400,7 +452,7 @@ public class LecturerCreatesAssessmentController {
             loader.setLocation(getClass().getResource("/Lecturer/LecturerAddsTextUI.fxml"));
             loader.load();
             LecturerAddsTextController controller = loader.getController();
-            controller.initData(lecturer, selectedModule, questions, questionIndex, assessment);
+            controller.initData(lecturer, selectedModule, questions, questionIndex, assessment, isCreateMode);
 
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
