@@ -1,6 +1,7 @@
 package Student;
 
 import Helpers.AlertHandler;
+import Helpers.DesktopNotification;
 import Helpers.MySQLHandler;
 import Model.StudentModule;
 import Model.StudentUser;
@@ -18,6 +19,8 @@ import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 import Model.User;
 
+import java.awt.*;
+import java.net.MalformedURLException;
 import java.util.List;
 
 public class StudentHomeController {
@@ -52,10 +55,14 @@ public class StudentHomeController {
         }
     }
 
-    public void initData(StudentUser user) {
+    public void initData(StudentUser user) throws MalformedURLException, AWTException {
         this.user = user;
         loadUser();
         loadModules();
+        int newTests = SqlHandler.StudentHasNewAssessments(user.getId());
+        if (newTests > 0) {
+            DesktopNotification.displayTray(user.getName(), newTests);
+        }
     }
 
     public void loadUser(){

@@ -695,7 +695,7 @@ public class MySQLHandler {
         int count = 0;
         try {
             Statement stmt = Con.createStatement();
-            String query = "SELECT COUNT(qora) AS REGULAR_COUNT FROM dqs_qanda WHERE content='n' OR content='m'";
+            String query = "SELECT COUNT(qora) AS REGULAR_COUNT FROM dqs_qanda WHERE LENGTH(content) < 2";
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
                 count = rs.getInt("REGULAR_COUNT");
@@ -736,5 +736,22 @@ public class MySQLHandler {
             System.out.println(e.getMessage());
         }
         return ret;
+    }
+
+    public int StudentHasNewAssessments(int StudentId) {
+        int count = 0;
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT COUNT(assessmentID) AS REGULAR_COUNT " +
+                    "FROM dqs_studentsassessments WHERE completed='0' AND studentID=%d", StudentId);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                count = rs.getInt("REGULAR_COUNT");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return count;
     }
 }
