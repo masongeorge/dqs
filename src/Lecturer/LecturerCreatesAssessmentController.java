@@ -457,7 +457,7 @@ public class LecturerCreatesAssessmentController {
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
             stage.setTitle("Regular Question");
-            stage.setScene(new Scene(parent, 581, 136));
+            stage.setScene(new Scene(parent, 656, 136));
             stage.setResizable(false);
             stage.show();
 

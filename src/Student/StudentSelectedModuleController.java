@@ -270,6 +270,7 @@ public class StudentSelectedModuleController {
 
         Map<String, String> GetMultipleChoice = SqlHandler.GetMultipleChoiceQ(AssessmentID);
         Map<String, String> GetRegular = SqlHandler.GerRegularQ(AssessmentID);
+
         int startQuestionIndex = Integer.parseInt(SqlHandler.GetAssessmentIndexes(AssessmentID).get(0));
         Test test = new Test(GetMultipleChoice, GetRegular, startQuestionIndex, AssessmentID);
 

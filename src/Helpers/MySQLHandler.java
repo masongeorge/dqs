@@ -410,7 +410,7 @@ public class MySQLHandler {
             try {
                 Statement stmt = Con.createStatement();
                 String query = String.format("SELECT qora, content FROM dqs_qanda WHERE " +
-                        "((SELECT content FROM dqs_qanda WHERE qora = 'question%s_t') = 'n') AND " +
+                        "((SELECT content FROM dqs_qanda WHERE qora = 'question%s_t') = 't') AND " +
                         "(qora='question%s' OR qora = 'question%s_c')", index, index, index);
                 //System.out.println(query);
                 ResultSet rs = stmt.executeQuery(query);

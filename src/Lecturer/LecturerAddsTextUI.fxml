@@ -1,23 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="136.0" prefWidth="581.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Lecturer.LecturerAddsTextController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="136.0" prefWidth="656.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Lecturer.LecturerAddsTextController">
    <children>
       <Label fx:id="counterLabel" layoutX="17.0" layoutY="21.0" text="Question 1">
          <font>
             <Font size="22.0" />
          </font>
       </Label>
-      <Button layoutX="390.0" layoutY="24.0" mnemonicParsing="false" onAction="#onCancel" prefHeight="27.0" prefWidth="82.0" text="Cancel" />
-      <Button layoutX="481.0" layoutY="24.0" mnemonicParsing="false" onAction="#onSave" prefHeight="27.0" prefWidth="82.0" text="Save" />
+      <Button layoutX="458.0" layoutY="21.0" mnemonicParsing="false" onAction="#onCancel" prefHeight="27.0" prefWidth="82.0" text="Cancel" />
+      <Button layoutX="549.0" layoutY="21.0" mnemonicParsing="false" onAction="#onSave" prefHeight="27.0" prefWidth="82.0" text="Save" />
       <Label layoutX="20.0" layoutY="81.0" text="Question title:" />
-      <TextField fx:id="titleField" layoutX="98.0" layoutY="76.0" prefHeight="25.0" prefWidth="252.0" />
-      <TextField fx:id="correctField" layoutX="414.0" layoutY="76.0" />
-      <Label layoutX="364.0" layoutY="80.0" text="Answer:" />
+      <TextField fx:id="titleField" layoutX="115.0" layoutY="77.0" prefHeight="25.0" prefWidth="252.0" />
+      <TextField fx:id="correctField" layoutX="455.0" layoutY="76.0" />
+      <Label layoutX="394.0" layoutY="81.0" text="Answer:" />
    </children>
 </Pane>
