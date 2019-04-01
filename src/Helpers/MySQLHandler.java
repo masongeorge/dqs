@@ -1,7 +1,5 @@
 package Helpers;
 
-import com.sun.org.apache.xpath.internal.operations.Mod;
-
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.*;
@@ -142,6 +140,24 @@ public class MySQLHandler {
         return id;
     }
 
+    public int GetAssessmentByTitle(String Title) {
+        int id = 0;
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT assessment_id FROM dqs_assessments WHERE title='%s'", Title);
+            //System.out.println(query);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                id = rs.getInt("assessment_id");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+            id = -1;
+        }
+        return id;
+    }
+
     public List<Integer> GetUserModules(int Id) {
         List<Integer> Modules = new ArrayList<>();
         try {
@@ -241,6 +257,23 @@ public class MySQLHandler {
         String dueDate = String.valueOf(timestamp1);
 
         return new String[] {moduleID, title, assignedDate, dueDate, atype};
+    }
+
+
+    public List<Integer> GetModuleAssessments(int moduleID) {
+        List<Integer> list = new ArrayList<>();
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT assessment_id from dqs_assessments WHERE moduleID = %d", moduleID);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                list.add(rs.getInt("assessment_id"));
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
     }
 
 
@@ -753,5 +786,71 @@ public class MySQLHandler {
             System.out.println(e.getMessage());
         }
         return count;
+    }
+
+    // Statistics
+
+    public double GetAvgAssessment(int AssessmentId) {
+        double res = 0;
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT ROUND(AVG(score), 2) AS RES FROM dqs_statistics WHERE assesmentID=%d", AssessmentId);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                res = rs.getFloat("RES");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return res;
+    }
+
+    public double GetMinAssessment(int AssessmentId) {
+        double res = 0;
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT ROUND(MIN(score), 2) AS RES FROM dqs_statistics WHERE assesmentID=%d", AssessmentId);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                res = rs.getFloat("RES");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return res;
+    }
+
+    public double GetMaxAssessment(int AssessmentId) {
+        double res = 0;
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT ROUND(MAX(score), 2) AS RES FROM dqs_statistics WHERE assesmentID=%d", AssessmentId);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                res = rs.getFloat("RES");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return res;
+    }
+
+    public int GetPerfecAssessmentR(int AssessmentId) {
+        int res = 0;
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT COUNT(score) AS RCOUNT FROM dqs_statistics WHERE score='100.0' and assesmentID=%d", AssessmentId);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                res = rs.getInt("RCOUNT");
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return res;
     }
 }

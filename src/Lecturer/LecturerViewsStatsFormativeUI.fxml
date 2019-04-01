@@ -1,54 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Lecturer.LecturerViewsStatsFormativeController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="504.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Lecturer.LecturerViewsStatsFormativeController">
    <children>
-      <Label fx:id="titleLabel" layoutX="198.0" layoutY="26.0" text="Statistics for Assessment">
+      <Label fx:id="titleLabel" layoutX="156.0" layoutY="27.0" text="Statistics for Assessment">
          <font>
             <Font size="19.0" />
          </font>
       </Label>
-      <Button layoutX="14.0" layoutY="24.0" mnemonicParsing="false" onAction="#onBack" prefHeight="27.0" prefWidth="70.0" text="Back" />
-      <Label layoutX="165.0" layoutY="107.0" text="Average Result:">
+      <Button layoutX="30.0" layoutY="22.0" mnemonicParsing="false" onAction="#onBack" prefHeight="37.0" prefWidth="81.0" text="Back" />
+      <Label layoutX="30.0" layoutY="111.0" text="Average result:">
          <font>
             <Font name="System Bold" size="14.0" />
          </font></Label>
-      <Label layoutX="166.0" layoutY="159.0" text="Lowest Result: ">
+      <Label layoutX="32.0" layoutY="150.0" text="Lowest result: ">
          <font>
             <Font name="System Bold" size="14.0" />
          </font></Label>
-      <Label layoutX="166.0" layoutY="208.0" text="Highest Result:">
+      <Label layoutX="300.0" layoutY="151.0" text="Highest result:">
          <font>
             <Font name="System Bold" size="14.0" />
          </font></Label>
-      <Label layoutX="146.0" layoutY="259.0" text="Number of perfect Results:">
+      <Label layoutX="32.0" layoutY="188.0" text="Number of perfect results:">
          <font>
             <Font name="System Bold" size="14.0" />
          </font>
       </Label>
-      <Label fx:id="averageLabel" layoutX="363.0" layoutY="108.0" text="22%" textFill="#bf1c1c">
+      <Label fx:id="averageLabel" layoutX="183.0" layoutY="109.0" text="22%" textFill="#bf1c1c">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Label fx:id="lowestLabel" layoutX="363.0" layoutY="160.0" text="22%" textFill="#bf1c1c">
+      <Label fx:id="lowestLabel" layoutX="183.0" layoutY="148.0" text="22%" textFill="#bf1c1c">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Label fx:id="highestLabel" layoutX="363.0" layoutY="200.0" text="22%" textFill="#bf1c1c">
+      <Label fx:id="highestLabel" layoutX="433.0" layoutY="149.0" text="22%" textFill="#bf1c1c">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Label fx:id="perfectLabel" layoutX="363.0" layoutY="260.0" text="22%" textFill="#bf1c1c">
+      <Label fx:id="perfectLabel" layoutX="244.0" layoutY="186.0" text="22%" textFill="#bf1c1c">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
+      <Label layoutX="32.0" layoutY="203.0" text="*Perfect results - results without any mistakes." textFill="#7c7878">
+         <font>
+            <Font size="10.0" />
+         </font></Label>
    </children>
 </Pane>

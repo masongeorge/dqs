@@ -67,7 +67,6 @@ public class StudentTakesText {
     public void updateQuestionUI(){
         String userAnswer = test.answers[currentQuestionIndex];
         answerTextArea.setText(userAnswer);
-
         counterLabel.setText("#" + (currentQuestionIndex+1));
         questionLabel.setText(question.getTitle());
 
@@ -157,6 +156,7 @@ public class StudentTakesText {
     public void onNext(){
         // save user's response
         saveUserAnswer();
+        System.out.println(String.valueOf(currentQuestionIndex));
         if(currentQuestionIndex == 4){
             // submit test..
             submitTest();

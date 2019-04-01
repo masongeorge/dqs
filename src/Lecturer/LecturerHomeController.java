@@ -131,7 +131,7 @@ public class LecturerHomeController {
 
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
-            stage.setTitle("Module");
+            stage.setTitle(selectedModule.getModuleName() + " module");
             stage.setScene(new Scene(parent, 600, 400));
             stage.setResizable(false);
             stage.show();

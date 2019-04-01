@@ -3,7 +3,7 @@ package Lecturer;
 import Helpers.AlertHandler;
 import Helpers.MySQLHandler;
 import Model.*;
-import com.sun.org.apache.xpath.internal.operations.Mult;
+//import com.sun.org.apache.xpath.internal.operations.Mult;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;

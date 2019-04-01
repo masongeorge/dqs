@@ -73,7 +73,7 @@ public class LecturerSelectedAssessmentController {
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
             stage.setTitle("Statistics");
-            stage.setScene(new Scene(parent, 600, 400));
+            stage.setScene(new Scene(parent, 504, 250));
             stage.setResizable(false);
             stage.show();
 
@@ -116,7 +116,7 @@ public class LecturerSelectedAssessmentController {
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
             stage.setTitle("Create Assessment");
-            stage.setScene(new Scene(parent, 600, 400));
+            stage.setScene(new Scene(parent, 600, 312));
             stage.setResizable(false);
             stage.show();
 

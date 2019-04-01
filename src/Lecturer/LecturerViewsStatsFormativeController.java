@@ -55,10 +55,11 @@ public class LecturerViewsStatsFormativeController {
 
     public void loadData(){
         titleLabel.setText("Statistics for " + selectedAssessment.getName());
-        averageLabel.setText("20%");
-        lowestLabel.setText("30%");
-        highestLabel.setText("40%");
-        perfectLabel.setText("12");
+        int id = Integer.parseInt(SqlHandler.GetIdByAssessmentName(selectedAssessment.getName()));
+        averageLabel.setText(String.valueOf(SqlHandler.GetAvgAssessment(id)) + "%");
+        lowestLabel.setText(String.valueOf(SqlHandler.GetMinAssessment(id)) + "%");
+        highestLabel.setText(String.valueOf(SqlHandler.GetMaxAssessment(id)) + "%");
+        perfectLabel.setText(String.valueOf(SqlHandler.GetPerfecAssessmentR(id)));
     }
 
     public void onBack(){
@@ -72,7 +73,7 @@ public class LecturerViewsStatsFormativeController {
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
             stage.setTitle("Your Assessment");
-            stage.setScene(new Scene(parent, 600, 245));
+            stage.setScene(new Scene(parent, 536, 175));
             stage.setResizable(false);
             stage.show();
 

@@ -184,6 +184,7 @@ public class StudentTakesMultipleChoice {
     public void onNext(){
         // save user's response
         saveSelectedAnswer();
+        System.out.println(String.valueOf(currentQuestionIndex));
         if(currentQuestionIndex == 4){
             // Submit test...
             submitTest();

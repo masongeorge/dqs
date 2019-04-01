@@ -18,6 +18,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
 
+import java.util.List;
+
 
 public class LecturerAssessmentsController {
 
@@ -58,12 +60,15 @@ public class LecturerAssessmentsController {
 
     public void loadAssessments(){
         assessments = FXCollections.observableArrayList();
+        List<Integer> AssessmentIds = SqlHandler.GetModuleAssessments(selectedModule.getModuleID());
 
-        Assessment a1 = new Assessment("Assignment 1", "2019-03-30 00:00:00", "2019-03-30 00:00:00", 0);
-        Assessment a2 = new Assessment("Assignment 2", "2019-03-30 00:00:00", "2019-03-30 00:00:00", 1);
-
-        assessments.add(a1);
-        assessments.add(a2);
+        for (int Id : AssessmentIds) {
+            String[] AssessmentData = SqlHandler.GetAssessmentData(Id);
+            if (!AssessmentData[1].contains("none")) {
+                Assessment a = new Assessment(AssessmentData[1], AssessmentData[2], AssessmentData[3], Integer.parseInt(AssessmentData[4]));
+                assessments.add(a);
+            }
+        }
 
         assessmentsTable.setItems(assessments);
         assessmentsTable.refresh();
@@ -93,7 +98,7 @@ public class LecturerAssessmentsController {
 
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
-            stage.setTitle("Module");
+            stage.setTitle(selectedModule.getModuleName() + " module");
             stage.setScene(new Scene(parent, 600, 400));
             stage.setResizable(false);
             stage.show();
@@ -123,8 +128,8 @@ public class LecturerAssessmentsController {
 
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
-            stage.setTitle("Your Assessment");
-            stage.setScene(new Scene(parent, 600, 245));
+            stage.setTitle("Edit Assessment - " + selectedAssessment.getName());
+            stage.setScene(new Scene(parent, 536, 175));
             stage.setResizable(false);
             stage.show();
 

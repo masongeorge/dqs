@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.text.*?>
-<?import javafx.scene.control.*?>
-<?import java.lang.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 
-<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="245.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Lecturer.LecturerSelectedAssessmentController">
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="175.0" prefWidth="536.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="Lecturer.LecturerSelectedAssessmentController">
    <children>
-      <Label fx:id="titleLabel" layoutX="254.0" layoutY="22.0" text="Assessment">
+      <Label fx:id="titleLabel" layoutX="227.0" layoutY="19.0" text="Assessment">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <Button layoutX="21.0" layoutY="18.0" mnemonicParsing="false" onAction="#onBack" prefHeight="27.0" prefWidth="62.0" text="Back" />
-      <Label layoutX="180.0" layoutY="96.0" text="Assigned date:" />
-      <Label layoutX="180.0" layoutY="137.0" text="Due date:" />
-      <Button layoutX="188.0" layoutY="187.0" mnemonicParsing="false" onAction="#onView" prefHeight="27.0" prefWidth="227.0" text="View Statistics" />
-      <Button layoutX="466.0" layoutY="18.0" mnemonicParsing="false" onAction="#onEdit" text="Edit Assessment" />
-      <Label fx:id="assignedLabel" layoutX="293.0" layoutY="96.0" prefHeight="17.0" prefWidth="245.0" text="Date" />
-      <Label fx:id="dueLabel" layoutX="293.0" layoutY="137.0" prefHeight="17.0" prefWidth="245.0" text="Date" />
+      <Button layoutX="26.0" layoutY="18.0" mnemonicParsing="false" onAction="#onBack" prefHeight="27.0" prefWidth="70.0" text="Back" />
+      <Label layoutX="26.0" layoutY="79.0" text="Assigned date:" />
+      <Label layoutX="26.0" layoutY="114.0" text="Due date:" />
+      <Button layoutX="351.0" layoutY="71.0" mnemonicParsing="false" onAction="#onView" prefHeight="27.0" prefWidth="156.0" text="View Statistics" />
+      <Button layoutX="351.0" layoutY="115.0" mnemonicParsing="false" onAction="#onEdit" prefHeight="27.0" prefWidth="156.0" text="Edit Assessment" />
+      <Label fx:id="assignedLabel" layoutX="130.0" layoutY="79.0" prefHeight="17.0" prefWidth="195.0" text="Date" />
+      <Label fx:id="dueLabel" layoutX="130.0" layoutY="114.0" prefHeight="17.0" prefWidth="195.0" text="Date" />
    </children>
 </Pane>

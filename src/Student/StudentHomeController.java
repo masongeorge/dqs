@@ -60,9 +60,9 @@ public class StudentHomeController {
         loadUser();
         loadModules();
         int newTests = SqlHandler.StudentHasNewAssessments(user.getId());
-        if (newTests > 0) {
+        /*if (newTests > 0) {
             DesktopNotification.displayTray(user.getName(), newTests);
-        }
+        }*/
     }
 
     public void loadUser(){

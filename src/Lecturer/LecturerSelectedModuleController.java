@@ -127,8 +127,8 @@ public class LecturerSelectedModuleController {
 
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
-            stage.setTitle("Create Assessment");
-            stage.setScene(new Scene(parent, 600, 400));
+            stage.setTitle("View Assessments");
+            stage.setScene(new Scene(parent, 600, 312));
             stage.setResizable(false);
             stage.show();
 
