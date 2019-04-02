@@ -102,7 +102,8 @@ public class LecturerSelectedModuleController {
             LecturerCreatesAssessmentController controller = loader.getController();
             Question questions[] = new Question[5];
             Assessment assessment = new Assessment();
-            controller.initData(lecturer, selectedModule, questions, assessment, true);
+
+            controller.initData(lecturer, selectedModule, questions, assessment, true, -1);
 
             Parent parent = loader.getRoot();
             Stage stage = new Stage();

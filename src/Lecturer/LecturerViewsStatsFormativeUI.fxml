@@ -45,7 +45,7 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <Label fx:id="perfectLabel" layoutX="244.0" layoutY="186.0" text="22%" textFill="#bf1c1c">
+      <Label fx:id="perfectLabel" layoutX="244.0" layoutY="186.0" text="22%" textFill="#1a8231">
          <font>
             <Font size="16.0" />
          </font>

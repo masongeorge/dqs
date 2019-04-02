@@ -205,7 +205,7 @@ public class StudentTakesMultipleChoice {
         // NEED TO UPLOAD THOSE
 
         int AssessmentId = test.GetAssessmentId();
-        if (SqlHandler.UpdateUserStatistics(AssessmentId, String.valueOf(percent)) &&
+        if (SqlHandler.UpdateUserStatistics(user.getId(), AssessmentId, String.valueOf(percent)) &&
                 SqlHandler.UpdateStatistics(user.getId(), AssessmentId, percent, correctAnswers, wrongAnswers)) {
             AlertHandler.showSuccessAlert("Test submission successful", "Test has been successfully submitted, you may now exit!");
         } else {

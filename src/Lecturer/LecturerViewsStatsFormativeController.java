@@ -9,7 +9,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+
+import java.text.DecimalFormat;
 
 public class LecturerViewsStatsFormativeController {
 
@@ -36,6 +39,10 @@ public class LecturerViewsStatsFormativeController {
 
     private Assessment selectedAssessment;
 
+    private String red = "#bf1c1c";
+
+    private String green = "#1a8231";
+
     @FXML
     public void initialize(){
         try{
@@ -56,10 +63,35 @@ public class LecturerViewsStatsFormativeController {
     public void loadData(){
         titleLabel.setText("Statistics for " + selectedAssessment.getName());
         int id = Integer.parseInt(SqlHandler.GetIdByAssessmentName(selectedAssessment.getName()));
-        averageLabel.setText(String.valueOf(SqlHandler.GetAvgAssessment(id)) + "%");
-        lowestLabel.setText(String.valueOf(SqlHandler.GetMinAssessment(id)) + "%");
-        highestLabel.setText(String.valueOf(SqlHandler.GetMaxAssessment(id)) + "%");
+        DecimalFormat format = new DecimalFormat("##.00");
+        double average = SqlHandler.GetAvgAssessment(id);
+
+        if (average >= 40) {
+            averageLabel.setTextFill(Paint.valueOf(green));
+        } else {
+            averageLabel.setTextFill(Paint.valueOf(red));
+        }
+        averageLabel.setText(String.valueOf(format.format(average) + "%"));
+
+        double min = SqlHandler.GetMinAssessment(id);
+
+        if (min >= 40) {
+            lowestLabel.setTextFill(Paint.valueOf(green));
+        } else {
+            lowestLabel.setTextFill(Paint.valueOf(red));
+        }
+        lowestLabel.setText(String.valueOf(min) + "%");
+
+        double high = SqlHandler.GetMinAssessment(id);
+        if (high >= 40) {
+            highestLabel.setTextFill(Paint.valueOf(green));
+        } else {
+            highestLabel.setTextFill(Paint.valueOf(red));
+        }
+        highestLabel.setText(String.valueOf(high) + "%");
+
         perfectLabel.setText(String.valueOf(SqlHandler.GetPerfecAssessmentR(id)));
+
     }
 
     public void onBack(){

@@ -14,7 +14,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
+
+import java.text.DecimalFormat;
+import java.util.Map;
 
 public class LecturerViewsStatsSummative {
 
@@ -52,6 +56,10 @@ public class LecturerViewsStatsSummative {
 
     private ObservableList<StudentResult> studentResults;
 
+    private String red = "#bf1c1c";
+
+    private String green = "#1a8231";
+
     @FXML
     public void initialize(){
         setupTableView();
@@ -66,6 +74,7 @@ public class LecturerViewsStatsSummative {
         this.lecturer = lecturer;
         this.selectedModule = selectedModule;
         this.selectedAssessment = selectedAssessment;
+        System.out.println(selectedAssessment.getName());
 
         loadData();
     }
@@ -78,18 +87,43 @@ public class LecturerViewsStatsSummative {
     }
 
     public void loadData(){
-        titleLabel.setText("Statistics for " + selectedAssessment.getName());
-        averageLabel.setText("20%");
-        lowestLabel.setText("30%");
-        highestLabel.setText("40%");
-        perfectLabel.setText("12");
+        int id = Integer.parseInt(SqlHandler.GetIdByAssessmentName(selectedAssessment.getName()));
+        DecimalFormat format = new DecimalFormat("##.00");
+        double average = SqlHandler.GetAvgAssessment(id);
+
+        if (average >= 40) {
+            averageLabel.setTextFill(Paint.valueOf(green));
+        } else {
+            averageLabel.setTextFill(Paint.valueOf(red));
+        }
+        averageLabel.setText(String.valueOf(format.format(average) + "%"));
+
+        double min = SqlHandler.GetMinAssessment(id);
+
+        if (min >= 40) {
+            lowestLabel.setTextFill(Paint.valueOf(green));
+        } else {
+            lowestLabel.setTextFill(Paint.valueOf(red));
+        }
+        lowestLabel.setText(String.valueOf(min) + "%");
+
+        double high = SqlHandler.GetMinAssessment(id);
+        if (high >= 40) {
+            highestLabel.setTextFill(Paint.valueOf(green));
+        } else {
+            highestLabel.setTextFill(Paint.valueOf(red));
+        }
+        highestLabel.setText(String.valueOf(high) + "%");
+
+        perfectLabel.setText(String.valueOf(SqlHandler.GetPerfecAssessmentR(id)));
 
         studentResults = FXCollections.observableArrayList();
-        StudentResult s1 = new StudentResult("Student 1", "82%");
-        StudentResult s2 = new StudentResult("Student 2", "90%");
-        studentResults.add(s1);
-        studentResults.add(s2);
+        Map<String, String> StudentResults = SqlHandler.GetAssessmentResults(id);
+        for(String key: StudentResults.keySet()) {
+            StudentResult s = new StudentResult(key, StudentResults.get(key) + "%");
+            studentResults.add(s);
 
+        }
         studentsTable.setItems(studentResults);
         studentsTable.refresh();
     }
@@ -105,7 +139,7 @@ public class LecturerViewsStatsSummative {
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
             stage.setTitle("Your Assessment");
-            stage.setScene(new Scene(parent, 600, 245));
+            stage.setScene(new Scene(parent, 536, 175));
             stage.setResizable(false);
             stage.show();
 
@@ -119,6 +153,4 @@ public class LecturerViewsStatsSummative {
         Stage oldStage = (Stage)titleLabel.getScene().getWindow();
         oldStage.close();
     }
-
-
 }

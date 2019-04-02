@@ -53,6 +53,8 @@ public class LecturerAddsMultipleController {
 
     private boolean isCreateMode;
 
+    private int assessmentID;
+
     @FXML
     public void initialize(){
         try{
@@ -62,13 +64,15 @@ public class LecturerAddsMultipleController {
         }
     }
 
-    public void initData(Lecturer lecturer, LecturerModule selectedModule, Question questions[], int currentQuestionIndex, Assessment assessment, boolean isCreateMode){
+    public void initData(Lecturer lecturer, LecturerModule selectedModule, Question questions[],
+                         int currentQuestionIndex, Assessment assessment, boolean isCreateMode, int assessmentID){
         this.lecturer = lecturer;
         this.selectedModule = selectedModule;
         this.questions = questions;
         this.currentQuestionIndex = currentQuestionIndex;
         this.assessment = assessment;
         this.isCreateMode = isCreateMode;
+        this.assessmentID = assessmentID;
 
         counterLabel.setText("Question " + (currentQuestionIndex + 1));
 
@@ -98,7 +102,8 @@ public class LecturerAddsMultipleController {
     }
 
     public void onSave(){
-        if(titleField.getText().length() > 0 && answer1Field.getText().length() > 0 && answer2Field.getText().length() > 0 && answer3Field.getText().length() > 0 && (answer1Radio.isSelected() || answer2Radio.isSelected() || answer3Radio.isSelected())){
+        if(!titleField.getText().isEmpty() && answer1Field.getText().length() > 0 && answer2Field.getText().length() > 0
+                && answer3Field.getText().length() > 0 && (answer1Radio.isSelected() || answer2Radio.isSelected() || answer3Radio.isSelected())){
             String correctAnswer = "";
             if(answer1Radio.isSelected()){
                 correctAnswer = answer1Field.getText();
@@ -120,7 +125,7 @@ public class LecturerAddsMultipleController {
             loader.setLocation(getClass().getResource("/Lecturer/LecturerCreatesAssessmentUI.fxml"));
             loader.load();
             LecturerCreatesAssessmentController controller = loader.getController();
-            controller.initData(lecturer, selectedModule, questions, assessment, isCreateMode);
+            controller.initData(lecturer, selectedModule, questions, assessment, isCreateMode, assessmentID);
 
             Parent parent = loader.getRoot();
             Stage stage = new Stage();

@@ -78,6 +78,11 @@ public class LecturerCreatesAssessmentController {
     @FXML
     private Label createLabel;
 
+    private int assessmentID;
+
+    @FXML
+    private Label typeLabel;
+
     @FXML
     public void initialize(){
         try{
@@ -119,13 +124,13 @@ public class LecturerCreatesAssessmentController {
         assignedDate.setValue(LocalDate.now());
     }
 
-    public void initData(Lecturer lecturer, LecturerModule selectedModule, Question questions[], Assessment assessment, boolean isCreateMode){
+    public void initData(Lecturer lecturer, LecturerModule selectedModule, Question questions[], Assessment assessment, boolean isCreateMode, int assessmentID){
         this.lecturer = lecturer;
         this.selectedModule = selectedModule;
         this.questions = questions;
         this.assessment = assessment;
         this.isCreateMode = isCreateMode;
-
+        this.assessmentID = assessmentID;
         if(!isCreateMode){
             createLabel.setText("Edit your assessment");
         }
@@ -136,12 +141,21 @@ public class LecturerCreatesAssessmentController {
     }
 
     public void loadAssessmentData(){
+
+        if (assessmentID != -1) {
+            typeLabel.setVisible(false);
+            formativeRadio.setVisible(false);
+            summativeRadio.setVisible(false);
+        }
+
         if(assessment.getNameProperty() != null){
             titleField.setText(assessment.getName());
         }
-
         if(assessment.getAssignedDateProperty() != null){
             String dateString = assessment.getAssignedDateProperty().get();
+            if (dateString.substring(dateString.length() - 2).equals(".0")) {
+                dateString = dateString.substring(0, dateString.length() - 2);
+            }
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDate localDate = LocalDate.parse(dateString, formatter);
             assignedDate.setValue(localDate);
@@ -155,6 +169,9 @@ public class LecturerCreatesAssessmentController {
 
         if(assessment.getDueDateProperty() != null){
             String dateString = assessment.getDueDateProperty().get();
+            if (dateString.substring(dateString.length() - 2).equals(".0")) {
+                dateString = dateString.substring(0, dateString.length() - 2);
+            }
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
             LocalDate localDate = LocalDate.parse(dateString, formatter);
             dueDate.setValue(localDate);
@@ -176,7 +193,7 @@ public class LecturerCreatesAssessmentController {
     }
 
     public void saveAssessmentInfo(){
-        if(titleField.getText().length() > 0){
+        if(!titleField.getText().isEmpty()){
             assessment.setName(titleField.getText());
         }
 
@@ -215,7 +232,6 @@ public class LecturerCreatesAssessmentController {
         if(formativeRadio.isSelected()){
             assessment.setType(0);
         }
-
     }
 
     public void setupQuestionButtons(){
@@ -269,7 +285,7 @@ public class LecturerCreatesAssessmentController {
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
             stage.setTitle("Your Assessment");
-            stage.setScene(new Scene(parent, 600, 245));
+            stage.setScene(new Scene(parent, 536, 175));
             stage.setResizable(false);
             stage.show();
 
@@ -375,7 +391,57 @@ public class LecturerCreatesAssessmentController {
 
     public void saveEditedAssessment(){
         // Update the assessment in Database
-        loadLecturerSelectedAssessment();
+        try {
+            String query = "";
+            List<String> indexes = SqlHandler.GetAssessmentIndexes(assessmentID);
+            int newIndex = Integer.parseInt(indexes.get(0));
+
+            for (Question question : questions) {
+                if (question.getType().equals("m")) {
+                    MultipleQuestion mQuestion = (MultipleQuestion) question;
+                    // DB VALUES
+                    String newQuestion = "question" + String.valueOf(newIndex);
+                    String newQuestionIndex1 = "question" + String.valueOf(newIndex) + "_q1";
+                    String newQuestionIndex2 = "question" + String.valueOf(newIndex) + "_q2";
+                    String newQuestionIndex3 = "question" + String.valueOf(newIndex) + "_q3";
+                    String newQuestionCorrect = "question" + String.valueOf(newIndex) + "_c";
+
+                    // APPENDING TO QUERY
+                    query += String.format("UPDATE dqs_qanda SET content='%s' WHERE qora='%s';", mQuestion.getTitle(), newQuestion);
+                    query += String.format("UPDATE dqs_qanda SET content='%s' WHERE qora='%s';", mQuestion.getAnswer1(), newQuestionIndex1);
+                    query += String.format("UPDATE dqs_qanda SET content='%s' WHERE qora='%s';", mQuestion.getAnswer2(), newQuestionIndex2);
+                    query += String.format("UPDATE dqs_qanda SET content='%s' WHERE qora='%s';", mQuestion.getAnswer3(), newQuestionIndex3);
+                    query += String.format("UPDATE dqs_qanda SET content='%s' WHERE qora='%s';", mQuestion.getCorrectAnswer(), newQuestionCorrect);
+
+                    // INCREASING THE COUNTER
+                    newIndex++;
+                } else {
+                    TextQuestion tQuestion = (TextQuestion) question;
+                    // DB VALUES
+                    String newQuestion = "question" + String.valueOf(newIndex);
+                    String newQuestionCorrect = "question" + String.valueOf(newIndex) + "_c";
+                    query += String.format("UPDATE dqs_qanda SET content='%s' WHERE qora='%s';", tQuestion.getTitle(), newQuestion);
+                    query += String.format("UPDATE dqs_qanda SET content='%s' WHERE qora='%s';", tQuestion.getCorrectAnswer(), newQuestionCorrect);
+                    newIndex++;
+                }
+            }
+
+            if (SqlHandler.UpdateAssessment(assessmentID, titleField.getText(), assessment.getAssignedDateProperty().get(),
+                    assessment.getDueDateProperty().get())) {
+                String[] parts = query.split(";");
+                for (String part: parts) {
+                    SqlHandler.FillAssessmentQuestions(part);
+                    //System.out.println(part);
+                }
+                AlertHandler.showShortMessage("Test has been edited", String.format("%s has been successfully edited to the database!", titleField.getText()));
+                loadLecturerSelectedModule();
+            } else {
+                AlertHandler.showShortMessage("Error", "An error occured while saving data!");
+            }
+        }
+        catch (Exception ex) {
+            AlertHandler.showShortMessage("Error", ex.getMessage());
+        }
     }
 
 
@@ -387,8 +453,6 @@ public class LecturerCreatesAssessmentController {
         }else{
             saveEditedAssessment();
         }
-
-
     }
 
     public void onSummative(){
@@ -431,7 +495,7 @@ public class LecturerCreatesAssessmentController {
             loader.setLocation(getClass().getResource("/Lecturer/LecturerAddsMultipleUI.fxml"));
             loader.load();
             LecturerAddsMultipleController controller = loader.getController();
-            controller.initData(lecturer, selectedModule, questions, questionIndex, assessment, isCreateMode);
+            controller.initData(lecturer, selectedModule, questions, questionIndex, assessment, isCreateMode, assessmentID);
 
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
@@ -452,7 +516,7 @@ public class LecturerCreatesAssessmentController {
             loader.setLocation(getClass().getResource("/Lecturer/LecturerAddsTextUI.fxml"));
             loader.load();
             LecturerAddsTextController controller = loader.getController();
-            controller.initData(lecturer, selectedModule, questions, questionIndex, assessment, isCreateMode);
+            controller.initData(lecturer, selectedModule, questions, questionIndex, assessment, isCreateMode, assessmentID);
 
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
@@ -473,7 +537,7 @@ public class LecturerCreatesAssessmentController {
         if(questions[0] == null){
             showQuestionDialog(0);
         }else{
-            if(questions[0].getType() == "m"){
+            if(questions[0].getType().equals("m")){
                 loadMultipleQuestion(0);
             }else{
                 loadRegularQuestion(0);
@@ -486,7 +550,7 @@ public class LecturerCreatesAssessmentController {
         if(questions[1] == null){
             showQuestionDialog(1);
         }else{
-            if(questions[1].getType() == "m"){
+            if(questions[1].getType().equals("m")){
                 loadMultipleQuestion(1);
             }else{
                 loadRegularQuestion(1);
@@ -499,7 +563,7 @@ public class LecturerCreatesAssessmentController {
         if(questions[2] == null){
             showQuestionDialog(2);
         }else{
-            if(questions[2].getType() == "m"){
+            if(questions[2].getType().equals("m")){
                 loadMultipleQuestion(2);
             }else{
                 loadRegularQuestion(2);
@@ -512,7 +576,7 @@ public class LecturerCreatesAssessmentController {
         if(questions[3] == null){
             showQuestionDialog(3);
         }else{
-            if(questions[3].getType() == "m"){
+            if(questions[3].getType().equals("m")){
                 loadMultipleQuestion(3);
             }else{
                 loadRegularQuestion(3);
@@ -525,7 +589,7 @@ public class LecturerCreatesAssessmentController {
         if(questions[4] == null){
             showQuestionDialog(4);
         }else{
-            if(questions[4].getType() == "m"){
+            if(questions[4].getType().equals("m")){
                 loadMultipleQuestion(4);
             }else{
                 loadRegularQuestion(4);
@@ -537,6 +601,4 @@ public class LecturerCreatesAssessmentController {
         Stage oldStage = (Stage)titleField.getScene().getWindow();
         oldStage.close();
     }
-
-
 }

@@ -410,7 +410,7 @@ public class MySQLHandler {
             try {
                 Statement stmt = Con.createStatement();
                 String query = String.format("SELECT qora, content FROM dqs_qanda WHERE " +
-                        "((SELECT content FROM dqs_qanda WHERE qora = 'question%s_t') = 't') AND " +
+                        "((SELECT content FROM dqs_qanda WHERE qora = 'question%s_t') = 'n') AND " +
                         "(qora='question%s' OR qora = 'question%s_c')", index, index, index);
                 //System.out.println(query);
                 ResultSet rs = stmt.executeQuery(query);
@@ -447,14 +447,15 @@ public class MySQLHandler {
         return ret;
     }
 
-    public Boolean UpdateUserStatistics(int assessmentID, String resultScore) {
+    public Boolean UpdateUserStatistics(int studentId, int assessmentID, String resultScore) {
         Boolean ret = false;
         try {
-            String query ="UPDATE dqs_studentsassessments SET completed = '1' , result = ? WHERE assessmentID = ?";
+            String query ="UPDATE dqs_studentsassessments SET completed = '1' , result = ? WHERE assessmentID = ? AND studentID = ?";
 
             PreparedStatement preparedStmt = Con.prepareStatement(query);
             preparedStmt.setString (1, resultScore);
             preparedStmt.setInt (2, assessmentID);
+            preparedStmt.setInt (3, studentId);
 
             preparedStmt.execute();
             ret = true;
@@ -852,5 +853,96 @@ public class MySQLHandler {
             System.out.println(e.getMessage());
         }
         return res;
+    }
+
+    public Map<String ,String> GetAssessmentResults(int AssessmentId) {
+        Map<String, String> map = new HashMap<String, String>();
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT result as student_result, " +
+                    "(SELECT name FROM dqs_users WHERE id = studentID) AS student_name FROM dqs_studentsassessments" +
+                    " WHERE completed='1' AND assessmentID=%d", AssessmentId);
+            //System.out.println(query);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                map.put(rs.getString("student_name"), rs.getString("student_result"));
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return map;
+    }
+
+    public String[] GetQAndA(int index) {
+        String qtype = "";
+        String title = "";
+        String a1 = "";
+        String a2 = "";
+        String a3 = "";
+        String correct = "";
+
+        String temp = null;
+        String temp1 = null;
+
+        try {
+            Statement stmt = Con.createStatement();
+            String query = String.format("SELECT qora, content FROM dqs_qanda " +
+                    "WHERE qora='question%d' or qora='question%d_q1' or qora='question%d_q2' or qora='question%d_q3' " +
+                    "or qora='question%d_c' or qora='question%d_t'",
+                    index, index, index, index, index, index);
+            ResultSet rs = stmt.executeQuery(query);
+            while(rs.next()) {
+                temp = rs.getString(String.format("qora", index));
+                if (temp.equals(String.format("question%d", index))) {
+                    title = rs.getString(String.format("content", index));
+                    //System.out.println(title);
+                }
+                else if (temp.equals(String.format("question%d_q1", index))) {
+                    a1 = rs.getString(String.format("content", index));
+                    //System.out.println(a1);
+                }
+                else if (temp.equals(String.format("question%d_q2", index))) {
+                    a2 = rs.getString(String.format("content", index));
+                    //System.out.println(a2);
+                }
+                else if (temp.equals(String.format("question%d_q3", index))) {
+                    a3 = rs.getString(String.format("content", index));
+                    //System.out.println(a3);
+                }
+                else if (temp.equals(String.format("question%d_c", index))) {
+                    correct = rs.getString(String.format("content", index));
+                    //System.out.println(correct);
+                }
+                else if (temp.equals(String.format("question%d_t", index))) {
+                    qtype = rs.getString(String.format("content", index));
+                    //System.out.println(qtype);
+                }
+            }
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return new String[] {qtype, title, a1, a2, a3, correct};
+    }
+
+    public Boolean UpdateAssessment(int AssessmentId, String title, String AssignedDate, String DueDate) {
+        Boolean ret = false;
+        try {
+            String query ="UPDATE dqs_assessments SET title = ?, assignedDate = ?, dueDate = ? WHERE assessment_id = ?";
+
+            PreparedStatement preparedStmt = Con.prepareStatement(query);
+            preparedStmt.setString (1, title);
+            preparedStmt.setString (2, AssignedDate);
+            preparedStmt.setString   (3, DueDate);
+            preparedStmt.setInt   (4, AssessmentId);
+
+            preparedStmt.execute();
+            ret = true;
+        }
+        catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return ret;
     }
 }

@@ -36,6 +36,8 @@ public class LecturerAddsTextController {
 
     private boolean isCreateMode;
 
+    private int assessmentID;
+
     @FXML
     public void initialize(){
         try{
@@ -45,13 +47,15 @@ public class LecturerAddsTextController {
         }
     }
 
-    public void initData(Lecturer lecturer, LecturerModule selectedModule, Question questions[], int currentQuestionIndex, Assessment assessment, boolean isCreateMode){
+    public void initData(Lecturer lecturer, LecturerModule selectedModule, Question questions[], int currentQuestionIndex,
+                         Assessment assessment, boolean isCreateMode, int assessmentID){
         this.lecturer = lecturer;
         this.selectedModule = selectedModule;
         this.questions = questions;
         this.currentQuestionIndex = currentQuestionIndex;
         this.assessment = assessment;
         this.isCreateMode = isCreateMode;
+        this.assessmentID = assessmentID;
 
         counterLabel.setText("Question " + (currentQuestionIndex + 1));
 
@@ -86,7 +90,7 @@ public class LecturerAddsTextController {
             loader.setLocation(getClass().getResource("/Lecturer/LecturerCreatesAssessmentUI.fxml"));
             loader.load();
             LecturerCreatesAssessmentController controller = loader.getController();
-            controller.initData(lecturer, selectedModule, questions, assessment, isCreateMode);
+            controller.initData(lecturer, selectedModule, questions, assessment, isCreateMode, assessmentID);
 
             Parent parent = loader.getRoot();
             Stage stage = new Stage();

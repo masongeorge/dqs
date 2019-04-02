@@ -1,16 +1,15 @@
 package Lecturer;
 
 import Helpers.MySQLHandler;
-import Model.Assessment;
-import Model.Lecturer;
-import Model.LecturerModule;
-import Model.Question;
+import Model.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
+
+import java.util.List;
 
 public class LecturerSelectedAssessmentController {
 
@@ -133,10 +132,22 @@ public class LecturerSelectedAssessmentController {
             loader.load();
             LecturerCreatesAssessmentController controller = loader.getController();
 
-            Question questions[] = new Question[5];
-            // load the questions into the array from the database...
+            int id = Integer.parseInt(SqlHandler.GetIdByAssessmentName(selectedAssessment.getName()));
+            List<String> indexes1 = SqlHandler.GetAssessmentIndexes(id);
 
-            controller.initData(lecturer, selectedModule, questions, selectedAssessment, false);
+            Question questions[] = new Question[5];
+            int counter = 0;
+            for (String in : indexes1) {
+                String[] dt = SqlHandler.GetQAndA(Integer.parseInt(in));
+                if (dt[0].equals("m")) {
+                    questions[counter] = new MultipleQuestion(dt[1], dt[0], dt[2], dt[3], dt[4], dt[5]);
+                } else {
+                    questions[counter] = new TextQuestion(dt[1], dt[0], dt[5]);
+                }
+                counter++;
+            }
+
+            controller.initData(lecturer, selectedModule, questions, selectedAssessment, false, id);
 
             Parent parent = loader.getRoot();
             Stage stage = new Stage();
