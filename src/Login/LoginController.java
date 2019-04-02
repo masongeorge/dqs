@@ -4,16 +4,26 @@ import Lecturer.LecturerHomeController;
 import Model.Lecturer;
 import Model.StudentUser;
 import Student.StudentHomeController;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.stage.Stage;
 
 import Helpers.*;
+
+import javafx.scene.input.KeyEvent;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.GeneralSecurityException;
 
 public class LoginController {
 
@@ -23,6 +33,9 @@ public class LoginController {
     @FXML
     private PasswordField passwordField;
 
+    @FXML
+    private CheckBox rememberMe;
+
     private Alert alert;
     private MySQLHandler SqlHandler;
 
@@ -31,6 +44,7 @@ public class LoginController {
     public void initialize(){
         try{
             SqlHandler = new MySQLHandler("c1841485", "6Z=q]K~GXKzcjW=d");
+            CheckRememberMe();
         }catch (Exception e){
             System.out.println(e);
         }
@@ -47,6 +61,7 @@ public class LoginController {
                     // Login Failed
                     AlertHandler.showErrorAlert("Login failed!", "Unable to login!", "Your username or password is incorrect");
                 }
+                getRemember();
             }
             catch (Exception e) {
                 throw e;
@@ -123,6 +138,79 @@ public class LoginController {
         boolean isPassValid = Validators.isValidPassword(passwordField.getText());
 
         return isEmailValid && isPassValid;
+    }
+
+    @FXML
+    public void onEnter(ActionEvent ae){
+        onLogin();
+    }
+
+    private void CheckRememberMe() {
+        File tempFile = new File("temp/tempdata.txt");
+        boolean exists = tempFile.exists();
+
+        if (exists) {
+            rememberMe.setSelected(true);
+            String fileName = "temp/tempdata.txt";
+            String line = null;
+            String tempHolder = "";
+
+            try {
+                FileReader fileReader =
+                        new FileReader(fileName);
+
+                BufferedReader bufferedReader =
+                        new BufferedReader(fileReader);
+
+                while((line = bufferedReader.readLine()) != null) {
+                    tempHolder += line + "{{>!";
+                }
+
+                // Always close files.
+                bufferedReader.close();
+            }
+            catch(FileNotFoundException ex) {
+                System.out.println(
+                        "Unable to open file '" +
+                                fileName + "'");
+            }
+            catch(IOException ex) {
+                System.out.println(
+                        "Error reading file '"
+                                + fileName + "'");
+            }
+            String[] parts = tempHolder.split("\\{\\{>!");
+            try {
+                emailTextField.setText(EncDecTool.decrypt(parts[0]));
+                passwordField.setText(EncDecTool.decrypt(parts[1]));
+            } catch (GeneralSecurityException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @FXML
+    public void getRemember(){
+        if (rememberMe.isSelected()) {
+            try (Writer writer = new BufferedWriter(new OutputStreamWriter(
+                    new FileOutputStream("temp/tempdata.txt"), "utf-8"))) {
+                writer.write(EncDecTool.encrypt(emailTextField.getText()));
+                ((BufferedWriter) writer).newLine();
+                writer.write(EncDecTool.encrypt(passwordField.getText()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (GeneralSecurityException e) {
+                e.printStackTrace();
+            }
+        } else {
+            try {
+                Files.deleteIfExists(Paths.get("temp/tempdata.txt"));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     public void onSignUp(){

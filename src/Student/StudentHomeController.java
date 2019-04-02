@@ -1,10 +1,10 @@
 package Student;
 
 import Helpers.AlertHandler;
-import Helpers.DesktopNotification;
 import Helpers.MySQLHandler;
 import Model.StudentModule;
 import Model.StudentUser;
+import ds.desktop.notify.DesktopNotify;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -17,7 +17,6 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.stage.Stage;
-import Model.User;
 
 import java.awt.*;
 import java.net.MalformedURLException;
@@ -45,6 +44,8 @@ public class StudentHomeController {
 
     private MySQLHandler SqlHandler;
 
+    public static boolean notified = false;
+
     @FXML
     public void initialize(){
         setupTableView();
@@ -55,18 +56,24 @@ public class StudentHomeController {
         }
     }
 
-    public void initData(StudentUser user) throws MalformedURLException, AWTException {
+    public void initData(StudentUser user) {
         this.user = user;
         loadUser();
         loadModules();
-        int newTests = SqlHandler.StudentHasNewAssessments(user.getId());
-        /*if (newTests > 0) {
-            DesktopNotification.displayTray(user.getName(), newTests);
-        }*/
     }
 
     public void loadUser(){
         welcomeLabel.setText("Welcome " + user.getName());
+        int newTests = SqlHandler.StudentHasNewAssessments(user.getId());
+        if (!notified) {
+            notified = true;
+            if (newTests > 0) {
+                DesktopNotify.showDesktopMessage(
+                        "New tests available",
+                        String.format("Welcome back, %s! You have got %d new assessment(s)!",user.getName(), newTests),
+                        DesktopNotify.INFORMATION);
+            }
+        }
     }
 
     public void setupTableView(){
