@@ -3,13 +3,12 @@ package Helpers;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
+import java.util.Base64;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
 import javax.crypto.spec.PBEParameterSpec;
-import sun.misc.BASE64Decoder;
-import sun.misc.BASE64Encoder;
 
 public class EncDecTool {
 
@@ -26,8 +25,8 @@ public class EncDecTool {
     }
 
     private static String base64Encode(byte[] bytes) {
-        // NB: This class is internal, and you probably should use another impl
-        return new BASE64Encoder().encode(bytes);
+        byte[] encodedBytes = Base64.getEncoder().encode(bytes);
+        return new String(encodedBytes);
     }
 
     public static String decrypt(String property) throws GeneralSecurityException, IOException {
@@ -39,8 +38,7 @@ public class EncDecTool {
     }
 
     private static byte[] base64Decode(String property) throws IOException {
-        // NB: This class is internal, and you probably should use another impl
-        return new BASE64Decoder().decodeBuffer(property);
+        byte[] decodedBytes = Base64.getDecoder().decode(property);
+        return decodedBytes;
     }
-
 }
