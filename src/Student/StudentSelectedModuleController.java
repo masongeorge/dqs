@@ -116,6 +116,7 @@ public class StudentSelectedModuleController {
         lecturerLabel.setText("By " + selectedModule.getLecturerName());
         StudentAssessments = SqlHandler.GetStudentAssessments(user.getId());
         StudentCompletedAssessments = SqlHandler.GetCompletedAssessments(user.getId());
+
         loadNewAssessments();
         loadCompletedAssessments();
     }
@@ -183,7 +184,7 @@ public class StudentSelectedModuleController {
             if (Integer.parseInt(AssessmentData[0]) == selectedModule.getmoduleId()) {
                 completedAssessments.add(new Assessment(AssessmentData[1], AssessmentData[2],
                         AssessmentData[3].substring(0, 10), Integer.parseInt(AssessmentData[4]), false,
-                        Double.valueOf(SqlHandler.GetAssessmentResult(StudentAssessment))));
+                        Double.valueOf(SqlHandler.GetAssessmentResult(StudentAssessment, user.getId()))));
             }
         }
         completedTableView.setItems(completedAssessments);

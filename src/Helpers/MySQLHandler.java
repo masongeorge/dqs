@@ -309,11 +309,11 @@ public class MySQLHandler {
         return list;
     }
 
-    public String GetAssessmentResult(int AssessmentId) {
+    public String GetAssessmentResult(int AssessmentId, int StudentId) {
         String result = "";
         try {
             Statement stmt = Con.createStatement();
-            String query = String.format("SELECT result from dqs_studentsassessments WHERE assessmentID = %d", AssessmentId);
+            String query = String.format("SELECT result from dqs_studentsassessments WHERE assessmentID = %d AND studentID=%d", AssessmentId, StudentId);
             //System.out.println(query);
             ResultSet rs = stmt.executeQuery(query);
             while(rs.next()) {
