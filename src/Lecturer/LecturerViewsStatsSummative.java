@@ -107,7 +107,7 @@ public class LecturerViewsStatsSummative {
         }
         lowestLabel.setText(String.valueOf(min) + "%");
 
-        double high = SqlHandler.GetMinAssessment(id);
+        double high = SqlHandler.GetMaxAssessment(id);
         if (high >= 40) {
             highestLabel.setTextFill(Paint.valueOf(green));
         } else {

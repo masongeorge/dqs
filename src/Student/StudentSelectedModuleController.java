@@ -166,7 +166,7 @@ public class StudentSelectedModuleController {
             String[] AssessmentData = SqlHandler.GetAssessmentData(StudentAssessment);
             if (Extra.IsAssessmentNew(AssessmentData[3])) {
                 if (Integer.parseInt(AssessmentData[0]) == selectedModule.getmoduleId()) {
-                    if (!SqlHandler.IsAssessmentCompleted(StudentAssessment)) {
+                    if (!SqlHandler.IsAssessmentCompleted(StudentAssessment, user.getId())) {
                         newAssessments.add(new Assessment(AssessmentData[1], AssessmentData[2].substring(0, 10),
                                 AssessmentData[3].substring(0, 10) + Extra.GetDifferenceInTime(AssessmentData[2], AssessmentData[3]), Integer.parseInt(AssessmentData[4]), false, -1));
                     }

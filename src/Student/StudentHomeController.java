@@ -64,8 +64,14 @@ public class StudentHomeController {
 
     public void loadUser(){
         welcomeLabel.setText("Welcome " + user.getName());
+        LoadNotification();
+    }
+
+    protected void LoadNotification() {
+        String OS = System.getProperty("os.name");
+        String tempOS = OS.replaceAll("[^A-Za-z]","").toLowerCase().replace(" ", "");
         int newTests = SqlHandler.StudentHasNewAssessments(user.getId());
-        if (!notified) {
+        if (!notified && tempOS.contains("windows")) {
             notified = true;
             if (newTests > 0) {
                 DesktopNotify.showDesktopMessage(
