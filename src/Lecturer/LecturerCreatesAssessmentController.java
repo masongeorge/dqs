@@ -363,7 +363,7 @@ public class LecturerCreatesAssessmentController {
 
                     query += String.format("INSERT INTO dqs_qanda (qora, content) VALUES ('%s', '%s');", newQuestion, tQuestion.getTitle());
                     query += String.format("INSERT INTO dqs_qanda (qora, content) VALUES ('%s', '%s');", newQuestionCorrect, tQuestion.getCorrectAnswer());
-                    query += String.format("INSERT INTO dqs_qanda (qora, content) VALUES ('%s', '%s');", newQuestionType, "t");
+                    query += String.format("INSERT INTO dqs_qanda (qora, content) VALUES ('%s', '%s');", newQuestionType, "n");
 
                     newIndex++;
                 }
