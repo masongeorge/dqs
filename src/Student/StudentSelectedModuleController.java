@@ -182,6 +182,12 @@ public class StudentSelectedModuleController {
         for (int StudentAssessment : StudentCompletedAssessments) {
             String[] AssessmentData = SqlHandler.GetAssessmentData(StudentAssessment);
             if (Integer.parseInt(AssessmentData[0]) == selectedModule.getmoduleId()) {
+                double result = 0;
+                if (SqlHandler.GetAssessmentResult(StudentAssessment, user.getId()).contains("-")) {
+                    result = 0;
+                } else {
+                    result = Double.valueOf(SqlHandler.GetAssessmentResult(StudentAssessment, user.getId()));
+                }
                 completedAssessments.add(new Assessment(AssessmentData[1], AssessmentData[2],
                         AssessmentData[3].substring(0, 10), Integer.parseInt(AssessmentData[4]), false,
                         Double.valueOf(SqlHandler.GetAssessmentResult(StudentAssessment, user.getId()))));
